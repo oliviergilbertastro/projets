@@ -37,7 +37,7 @@ class Pendulum():
         pendulums, = ax.plot([sp.sin(self.theta1)*self.l1, (sp.sin(self.theta1)*self.l1+sp.sin(self.theta2)*self.l2)], [-sp.cos(self.theta1)*self.l1, (-sp.cos(self.theta1)*self.l1-sp.cos(self.theta2)*self.l2)], 'o', color='red')
         pen2x = [(sp.sin(self.theta1)*self.l1+sp.sin(self.theta2)*self.l2)]
         pen2y = [(-sp.cos(self.theta1)*self.l1-sp.cos(self.theta2)*self.l2)]
-        history, = ax.plot(pen2x, pen2y, '--', lw=2, color='pink')
+        history, = ax.plot(pen2x, pen2y, '--', lw=1.5, color='red', alpha=0.7)
 
         # animation function.  This is called sequentially
         def init():
@@ -152,7 +152,7 @@ class Pendulum():
 
 
 #initialize pendulum:
-#pendule = Pendulum(1, 1, 1, 1, random()*np.pi/2-np.pi/4, random()*np.pi-np.pi/2, random()*10-5, random()*10-5)
+#pendule = Pendulum(1, 1, 1, 1, random()*2*np.pi, random()*2*np.pi, random()*10-5, random()*10-5)
 pendule = Pendulum(2, 1, 1, 1, 2, 2, 0, 0)
 #Animate:
 pendule.realtime(60, tres=0.02)

@@ -4,9 +4,10 @@ from random import random, gauss
 import sympy as sp
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
+import os
+plt.rcParams['animation.ffmpeg_path']='C:\\Users\\olivi\\Downloads\\ffmpeg\\ffmpeg-6.1.1-essentials_build\\bin\\ffmpeg.exe'
 
 G = 6.6743E-11
 
@@ -18,9 +19,21 @@ def mass_random(width, height, mean_mass, resolution, sigma):
 def distance(x1,y1,x2,y2):
     return np.sqrt((x1-x2)**2+(y1-y2)**2)
 
+
+
+def uniquify(path):
+    filename, extension = os.path.splitext(path)
+    counter = 1
+
+    while os.path.exists(path):
+        path = filename + "_" + str(counter) + extension
+        counter += 1
+
+    return path
+
 #Pendulum
 class Universe():
-    def __init__(self, width, height, mean_mass, resolution=1, sigma=1, tres=1):
+    def __init__(self, width, height, mean_mass, resolution=1, sigma=1, tres=1, add_mass=False, approximate=False):
         '''
         Create a square 2D universe with almost perfectly isotropic mass (energy) distribution
         '''
@@ -29,6 +42,7 @@ class Universe():
         self.tres = tres
         self.res = resolution
         self.grid = (int(width/resolution),int(height/resolution))
+        self.mean_mass = mean_mass
         x, y = np.meshgrid(np.arange(0,width, resolution), np.arange(0,height, resolution))
         #Initialize a randomly distributed spacetime
         self.spacetime = []
@@ -39,6 +53,8 @@ class Universe():
         #Initialize velocity grids (x and y) - static at t=0
         self.vx = np.zeros(self.grid)
         self.vy = np.zeros(self.grid)
+        self.add_mass = add_mass
+        self.approximate = approximate
 
     
 
@@ -76,7 +92,8 @@ class Universe():
             frame.append(self.spacetime)
         fig = plt.figure()
         ax = plt.axes()
-        im=plt.imshow(frame[0],interpolation='none', aspect='equal', cmap='inferno', vmin=np.min(frame[0]), vmax=np.max(frame[0]), origin='lower')
+        #im=plt.imshow(frame[0],interpolation='none', aspect='equal', cmap='inferno', vmin=np.min(frame[0]), vmax=np.max(frame[0]), origin='lower')
+        im=plt.imshow(frame[0],interpolation='none', aspect='equal', cmap='inferno', origin='lower')
         txt=plt.suptitle(f'{self.gini(frame[0])}')
         
         ax.set_xticks([])
@@ -85,22 +102,23 @@ class Universe():
         # animation function.  This is called sequentially
         def update(i):
             im.set_array(frame[i])
+            im.autoscale()
             txt.set_text(self.gini(frame[i]))
-            print(self.total_mass(frame[i]))
             return [im, txt]
 
         anim = FuncAnimation(
-                               fig, 
-                               update, 
-                               frames = frames,
-                               interval = 1000/fps, # in ms
-                               )
+                            fig, 
+                            update, 
+                            frames = frames,
+                            interval = 1000/fps, # in ms
+                            )
         
         print(f'Animating {int(frames)} frames - ({int(frames*self.tres)} seconds)')
         plt.show()
+
         if save:
-            anim.save('test_anim.mp4', fps=fps)
-    
+            anim.save(uniquify('animations\\animation.mp4'), fps=fps, extra_args=['-vcodec', 'libx264'])
+
     def next_time(self):
         next_spacetime = self.spacetime.copy()
         next_vx = self.vx.copy()
@@ -109,15 +127,18 @@ class Universe():
             for y1 in range(self.grid[1]):
                 for x2 in range(self.grid[0]):
                     for y2 in range(self.grid[1]):
-                        #print(f'({x1},{y1}) : ({x2},{y2})')
-                        if x1 != x2 or y1 != y2:
-                            xx1, xx2, yy1, yy2 = x1*self.res, x2*self.res, y1*self.res, y2*self.res
-                            angle = np.arctan2((yy2-yy1),(xx2-xx1))
-                            acc = G*self.spacetime[x2,y2]/(distance(xx1,yy1,xx2,yy2)**2)
-                            self.vx[x1,y1] += np.cos(angle)*acc*self.tres
-                            self.vy[x1,y1] += np.sin(angle)*acc*self.tres
-                            #if (x1==0 and y1==0):
-                                #print(f'({x2},{y2}):', acc)
+                        if distance(x1,y1,x2,y2) > 5 and self.approximate:
+                            pass
+                        else:
+                            #print(f'({x1},{y1}) : ({x2},{y2})')
+                            if x1 != x2 or y1 != y2:
+                                xx1, xx2, yy1, yy2 = x1*self.res, x2*self.res, y1*self.res, y2*self.res
+                                angle = np.arctan2((yy2-yy1),(xx2-xx1))
+                                acc = G*self.spacetime[x2,y2]/(distance(xx1,yy1,xx2,yy2)**2)
+                                self.vx[x1,y1] += np.cos(angle)*acc*self.tres
+                                self.vy[x1,y1] += np.sin(angle)*acc*self.tres
+                                #if (x1==0 and y1==0):
+                                    #print(f'({x2},{y2}):', acc)
                 #VX
                 if self.vx[x1,y1] > 0:
                     if x1 != self.grid[0]-1:
@@ -145,6 +166,9 @@ class Universe():
                         next_spacetime[x1,y1] -= dm
                         next_vx[x1,y1-1] += (dm*self.vy[x1,y1]+self.spacetime[x1,y1-1]*self.vy[x1,y1-1])/(dm+self.spacetime[x1,y1-1])
 
+                if self.add_mass:
+                    if x1 == 0 or y1 == 0 or x1 == self.grid[0]-1 or y1 == self.grid[1]-1:
+                        next_spacetime[x1, y1] += self.mean_mass/10
                 #Make sure the speed does not accumulate towards the outside of our universe
                 if x1 == 0 and self.vx[x1,y1] < 0:
                     self.vx[x1,y1] = 0
@@ -176,11 +200,11 @@ class Universe():
 
 
 
-universe = Universe(20, 20, 1000, 1, sigma=500, tres=5000)
+universe = Universe(50, 50, 1000, 1, sigma=1000, tres=5000, add_mass=False, approximate=True)
 #print(universe.gini())
 #universe.spacetime = np.zeros(universe.spacetime.shape)
 #universe.spacetime[4, 5] += 10000
 #universe.spacetime[8, 8] += 10000
 universe.next_time()
 universe.show()
-universe.animate(100, fps=10, save=True)
+universe.animate(200, fps=10, save=True)
