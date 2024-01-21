@@ -34,7 +34,7 @@ class Population():
 
 
 
-population = Population(100000, 0.001, fiability=0.95)
+population = Population(1000000, 0.001, fiability=0.99)
 
 
 print('----------DOING FIRST TESTS----------')
