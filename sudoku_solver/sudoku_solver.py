@@ -38,7 +38,7 @@ class Sudoku():
         for y in range(9):
             for x in range(9):
                 if self.startgrid[y,x] != self.blank:
-                    rect = Rectangle((x*50, y*50), 50, 50, color='black', alpha=0.2, fill=True)
+                    rect = Rectangle((x*50, y*50), 50, 50, color='black', alpha=0.25, fill=True)
                     ax1.add_patch(rect)
                 if self.grid[y,x] != self.blank:
                     plt.text((x)*50+12.5, (y)*50+39, self.grid[y,x], fontsize=30)
@@ -65,7 +65,7 @@ class Sudoku():
                 if self.grid[y,x] == self.blank:
                     interdictions = sorted(set(self.get_hline((y,x))+self.get_vline((y,x))+self.get_box((y,x))))
                     possibilities = list(allpossibilities-set(interdictions))
-                    
+
                     if len(possibilities) == min:
                         self.grid[y,x] = possibilities[int(np.random.random()*min)]
                         min = 1

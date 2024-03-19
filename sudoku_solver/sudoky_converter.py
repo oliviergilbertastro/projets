@@ -71,9 +71,9 @@ def read_picture(path, blank='-', show=False):
         for x in range(9):
             num_pic = pic[y*box+int(box/6):(y+1)*box-int(box/6),x*box+int(box/6):(x+1)*box-int(box/6)]
             grid[y,x] = pic_to_number(num_pic, blank=blank)
-            print(pic_to_number(num_pic, blank=blank))
-            plt.imshow(num_pic)
-            plt.show()
+            #print(pic_to_number(num_pic, blank=blank))
+            #plt.imshow(num_pic)
+            #plt.show()
             pass
     return grid
 

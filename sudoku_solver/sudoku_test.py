@@ -32,7 +32,7 @@ grille = Sudoku(
     ]
     )
 
-#grille = Sudoku(read_picture('sudoku_solver/pictures/sudoku9.png', show=False))
+#grille = Sudoku(read_picture('sudoku_solver/pictures/sudoku10.png', show=False))
 
 grille.show()
 grille.print()
