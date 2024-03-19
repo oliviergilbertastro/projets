@@ -34,7 +34,7 @@ def pic_to_number(pic, blank):
         return '8'
 
 
-def read_picture(path, blank='-'):
+def read_picture(path, blank='-', show=False):
 
     grid = np.empty((9,9), dtype=str)
 
@@ -63,8 +63,9 @@ def read_picture(path, blank='-'):
     box = int((width+height)/18)
     if width/height > 1.1 or height/width > 1.1:
         raise ValueError('Picture is not a square')
-    #plt.imshow(pic)
-    #plt.show()
+    if show:
+        plt.imshow(pic)
+        plt.show()
 
     for y in range(9):
         for x in range(9):
@@ -77,4 +78,4 @@ def read_picture(path, blank='-'):
 
 
 if __name__ == "__main__":
-    print(read_picture('sudoku_solver/pictures/sudoku1.png'))
+    print(read_picture('sudoku_solver/pictures/sudoku1.png', show=True))
