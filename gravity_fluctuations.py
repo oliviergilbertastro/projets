@@ -200,11 +200,11 @@ class Universe():
 
 
 
-universe = Universe(50, 50, 1000, 1, sigma=1000, tres=5000, add_mass=False, approximate=True)
+universe = Universe(20, 20, 1000, 1, sigma=1000, tres=5000, add_mass=False, approximate=True)
 #print(universe.gini())
 #universe.spacetime = np.zeros(universe.spacetime.shape)
 #universe.spacetime[4, 5] += 10000
 #universe.spacetime[8, 8] += 10000
 universe.next_time()
 universe.show()
-universe.animate(200, fps=10, save=True)
+universe.animate(100, fps=10, save=True)
