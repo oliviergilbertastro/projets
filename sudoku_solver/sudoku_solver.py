@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from matplotlib.patches import Rectangle
 
 def remove_blanks(a, blank='-'):
     x = []
@@ -17,8 +18,33 @@ class Sudoku():
         if self.grid.shape != (9,9):
             raise ValueError("Grid is not 9x9")
 
-    def show(self):
+    def print(self):
         print(self.grid)
+
+    def show(self):
+        fig = plt.gcf()
+        fig.set_size_inches(6, 6)
+        ax1 = plt.subplot(111)
+        ticklabels = ax1.get_xticklabels()
+        ticklabels.extend( ax1.get_yticklabels() )
+        for label in ticklabels:
+            label.set_fontsize(0)
+        for i in range(10):
+            lw = 1
+            if i%3 == 0:
+                lw = 5
+            plt.axvline(i*50, ymin=0, ymax=1, color='black', linewidth=lw)
+            plt.axhline(i*50, xmin=0, xmax=1, color='black', linewidth=lw)
+        for y in range(9):
+            for x in range(9):
+                if self.startgrid[y,x] != self.blank:
+                    rect = Rectangle((x*50, y*50), 50, 50, color='black', alpha=0.2, fill=True)
+                    ax1.add_patch(rect)
+                if self.grid[y,x] != self.blank:
+                    plt.text((x)*50+12.5, (y)*50+39, self.grid[y,x], fontsize=30)
+        plt.xlim(0, 450)
+        plt.ylim(450, 0)
+        plt.show()
 
     def get_hline(self, coord):
         y,x = coord
