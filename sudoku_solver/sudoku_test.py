@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sudoku_solver import Sudoku
+from sudoky_converter import *
 
 
 grille = Sudoku([
@@ -17,4 +18,10 @@ grille = Sudoku([
     ]
 )
 
+grille = Sudoku(read_picture('sudoku_solver/pictures/sudoku4.png'))
+
 grille.show()
+#print(grille.get_hline((4,3)))
+#print(grille.get_vline((4,3)))
+print('box:')
+print(grille.get_box((6,6)))
