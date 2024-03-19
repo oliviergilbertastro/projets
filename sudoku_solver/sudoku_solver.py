@@ -58,25 +58,13 @@ class Sudoku():
         y,x = coord
         return remove_blanks(self.grid[((y)//3)*3:((y)//3+1)*3,((x)//3)*3:((x)//3+1)*3].flatten(), self.blank)
 
-    def solve_iteration_basic(self):
+    def solve_iteration_guess(self, min=1):
         allpossibilities = set(['1', '2', '3', '4', '5', '6', '7', '8', '9'])
         for y in range(9):
             for x in range(9):
                 if self.grid[y,x] == self.blank:
                     interdictions = sorted(set(self.get_hline((y,x))+self.get_vline((y,x))+self.get_box((y,x))))
                     possibilities = list(allpossibilities-set(interdictions))
-                    #print((x,y), possibilities)
-                    if len(possibilities) == 1:
-                        self.grid[y,x] = possibilities[0]
-
-    def solve_iteration_guess(self, min=2):
-        allpossibilities = set(['1', '2', '3', '4', '5', '6', '7', '8', '9'])
-        for y in range(9):
-            for x in range(9):
-                if self.grid[y,x] == self.blank:
-                    interdictions = sorted(set(self.get_hline((y,x))+self.get_vline((y,x))+self.get_box((y,x))))
-                    possibilities = list(allpossibilities-set(interdictions))
-                    #print((x,y), possibilities)
                     
                     if len(possibilities) == min:
                         self.grid[y,x] = possibilities[int(np.random.random()*min)]
@@ -94,15 +82,14 @@ class Sudoku():
                 break
             print(iter, f'{int((1-list(thisgrid.flatten()).count(self.blank)/81)*100)}% solved')
             if method == 0:
-                #Easiest method: check all possibilities
-                self.solve_iteration_basic()
+                self.solve_iteration_guess(min=1)
                 if self.blank not in list(self.grid.flatten()):
                     unsolved = False
                 if np.array_equal(self.grid, thisgrid):
-                    #print('This grid cannot be solved using this resolution method.')
+                    #This grid cannot be solved using this resolution method.
                     method += 1
             elif method == 1:
-                #Dumbest method: guess when 2 possibilities
+                #Guess between 2 possibilities and immediately go back to first method
                 self.solve_iteration_guess(min=2)
                 if np.array_equal(self.grid, thisgrid):
                     self.grid = self.startgrid.copy()
