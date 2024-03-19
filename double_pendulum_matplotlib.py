@@ -152,8 +152,8 @@ class Pendulum():
 
 
 #initialize pendulum:
-#pendule = Pendulum(1, 1, 1, 1, random()*2*np.pi, random()*2*np.pi, random()*10-5, random()*10-5)
-pendule = Pendulum(2, 1, 1, 1, 2, 2, 0, 0)
+pendule = Pendulum(1, 1, 1, 1, random()*2*np.pi, random()*2*np.pi, random()*10-5, random()*10-5)
+#pendule = Pendulum(2, 1, 1, 1, 2, 2, 0, 0)
 #Animate:
 pendule.realtime(60, tres=0.02)
 #pendule.preanimate(1000, 30, 0.03)
