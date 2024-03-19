@@ -50,6 +50,7 @@ class Sudoku():
             thisgrid = self.grid.copy()
             iter += 1
             if method == 0:
+                #Easiest method: check all possibilities
                 self.solve_iteration()
                 if self.blank not in list(self.grid.flatten()):
                     unsolved = False
