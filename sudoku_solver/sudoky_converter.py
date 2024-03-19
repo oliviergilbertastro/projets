@@ -12,7 +12,7 @@ def pic_to_number(pic, blank):
         if i == 0:
             sum += 1
     covered = sum/len(pic.flatten())
-    if covered == 0:
+    if covered <= 0.05:
         return blank
     elif covered <= 0.11:
         return '1'
@@ -71,11 +71,12 @@ def read_picture(path, blank='-', show=False):
         for x in range(9):
             num_pic = pic[y*box+int(box/6):(y+1)*box-int(box/6),x*box+int(box/6):(x+1)*box-int(box/6)]
             grid[y,x] = pic_to_number(num_pic, blank=blank)
-            ##plt.imshow(num_pic)
+            print(pic_to_number(num_pic, blank=blank))
+            plt.imshow(num_pic)
             plt.show()
             pass
     return grid
 
 
 if __name__ == "__main__":
-    print(read_picture('sudoku_solver/pictures/sudoku1.png', show=True))
+    print(read_picture('sudoku_solver/pictures/sudoku9.png', show=True))
