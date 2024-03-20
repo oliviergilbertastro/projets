@@ -32,9 +32,8 @@ grille = Sudoku(
     ]
     )
 
-#grille = Sudoku(read_picture('sudoku_solver/pictures/sudoku4.png', show=False))
-
+grille = Sudoku(read_picture('sudoku_solver/pictures/sudoku7.png', show=False))
 
 grille.show()
-#grille.solve_puzzle()
-grille.solve_iteration(method=2)
+grille.solve_puzzle()
+grille.show()

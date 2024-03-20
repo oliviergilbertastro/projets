@@ -75,17 +75,17 @@ class Sudoku():
 
     def solve_iteration(self, method=0):
         allpossibilities = set(['1', '2', '3', '4', '5', '6', '7', '8', '9'])
-        
+
+        #First method: if there is only one possibility for the square, place the number
         for y in range(9):
             for x in range(9):
                 if self.grid[y,x] == self.blank:
                     interdictions = sorted(set(self.get_hline((y,x))+self.get_vline((y,x))+self.get_box((y,x))))
                     possibilities = list(allpossibilities-set(interdictions))
                     self.possibilities_grid[y,x] = possibilities
-
-                    #If there is only one possibility for the square, place the number
                     if len(possibilities) == 1:
                         self.grid[y,x] = possibilities[0]
+        #Second method: if no other square in a line/box can hold a number, place it in the one that can
         if method > 0:
             for y in range(9):
                 for x in range(9):
@@ -94,11 +94,55 @@ class Sudoku():
                         poss_list = []
                         for i in self.possibilities_grid[y,:]:
                             if i is not None:
-                                print(i)
                                 poss_list.extend(i)
                         for i in self.possibilities_grid[y,x]:
                             poss_list.remove(i)
-                        print(poss_list)
+                        poss_list = set(poss_list)
+                        for i in self.possibilities_grid[y,x]:
+                            if i not in poss_list:
+                                self.grid[y,x] = i
+                        #Vertical line
+                        poss_list = []
+                        for i in self.possibilities_grid[:,x]:
+                            if i is not None:
+                                poss_list.extend(i)
+                        for i in self.possibilities_grid[y,x]:
+                            poss_list.remove(i)
+                        poss_list = set(poss_list)
+                        for i in self.possibilities_grid[y,x]:
+                            if i not in poss_list:
+                                self.grid[y,x] = i
+                        #Box
+                        poss_list = []
+                        for i in self.possibilities_grid[((y)//3)*3:((y)//3+1)*3,((x)//3)*3:((x)//3+1)*3]:
+                            if i is not None:
+                                poss_list.extend(i)
+                        #Why do I need to create another list? I don't know
+                        new_poss_list = []
+                        for i in poss_list:
+                            if i is not None:
+                                new_poss_list.extend(i)
+                        for i in self.possibilities_grid[y,x]:
+                            new_poss_list.remove(i)
+                        poss_list = set(new_poss_list)
+                        for i in self.possibilities_grid[y,x]:
+                            if i not in poss_list:
+                                self.grid[y,x] = i
+        if method > 1:
+            mini = 2
+            for y in range(9):
+                for x in range(9):
+                    if self.grid[y,x] != self.blank:
+                        interdictions = sorted(set(self.get_hline((y,x))+self.get_vline((y,x))+self.get_box((y,x))))
+                        possibilities = list(allpossibilities-set(interdictions))
+
+                        if len(possibilities) == mini:
+                            self.grid[y,x] = possibilities[int(np.random.random()*mini)]
+                            mini = 1
+            if not self.check_validity():
+                self.grid = self.startgrid.copy()
+                self.method = 0
+                                
 
         
 
@@ -110,7 +154,7 @@ class Sudoku():
         """
         unsolved = True
         iter = 0
-        method = 0
+        self.method = 0
 
         #Check if the puzzle is already solved before trying to solve:
         if self.blank not in list(self.grid.flatten()) and self.check_validity():
@@ -123,12 +167,12 @@ class Sudoku():
             thisgrid = self.grid.copy()
             iter += 1
             print(iter, f'{int((1-list(thisgrid.flatten()).count(self.blank)/81)*100)}% solved')
-            
-            self.solve_iteration(method=method)
+
+            self.solve_iteration(method=self.method)
             if np.array_equal(self.grid, thisgrid):
                 #This runs only if the current method didn't change anything to the grid,
                 #so we go to the next method
-                method += 1
+                self.method += 1
 
             if self.blank not in list(self.grid.flatten()) and self.check_validity():
                     unsolved = False
