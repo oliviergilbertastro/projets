@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from sudoku_solver import Sudoku
+from sudoku_solver_v2 import Sudoku
 from sudoky_converter import *
 
 grille = Sudoku(
@@ -32,10 +32,9 @@ grille = Sudoku(
     ]
     )
 
-#grille = Sudoku(read_picture('sudoku_solver/pictures/sudoku10.png', show=False))
+#grille = Sudoku(read_picture('sudoku_solver/pictures/sudoku4.png', show=False))
+
 
 grille.show()
-grille.print()
-grille.solve_puzzle()
-grille.show()
-grille.print()
+#grille.solve_puzzle()
+grille.solve_iteration(method=2)
