@@ -132,19 +132,18 @@ class Sudoku():
             mini = 2
             for y in range(9):
                 for x in range(9):
-                    if self.grid[y,x] != self.blank:
+                    if self.grid[y,x] == self.blank:
                         interdictions = sorted(set(self.get_hline((y,x))+self.get_vline((y,x))+self.get_box((y,x))))
                         possibilities = list(allpossibilities-set(interdictions))
 
                         if len(possibilities) == mini:
                             self.grid[y,x] = possibilities[int(np.random.random()*mini)]
                             mini = 1
-            if not self.check_validity():
-                self.grid = self.startgrid.copy()
-                self.method = 0
                                 
 
-        
+    def reset(self):
+        self.grid = self.startgrid.copy()
+        self.method = 0
 
     def solve_puzzle(self):
         """
@@ -173,7 +172,10 @@ class Sudoku():
                 #This runs only if the current method didn't change anything to the grid,
                 #so we go to the next method
                 self.method += 1
-
+                if self.method > 10:
+                    self.reset()
+            if not self.check_validity():
+                self.reset()
             if self.blank not in list(self.grid.flatten()) and self.check_validity():
                     unsolved = False
         return iter
