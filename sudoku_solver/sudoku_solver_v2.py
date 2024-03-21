@@ -145,7 +145,7 @@ class Sudoku():
         self.grid = self.startgrid.copy()
         self.method = 0
 
-    def solve_puzzle(self):
+    def solve_puzzle(self, show_each_iter=False):
         """
         Solves the puzzle using different methods depending on the difficulty of the puzzle
         As the puzzle gets harder to solve, the 'method' int gets bigger, which changes the way
@@ -172,12 +172,14 @@ class Sudoku():
                 #This runs only if the current method didn't change anything to the grid,
                 #so we go to the next method
                 self.method += 1
-                if self.method > 10:
+                if self.method > 2:
                     self.reset()
             if not self.check_validity():
                 self.reset()
             if self.blank not in list(self.grid.flatten()) and self.check_validity():
                     unsolved = False
+            if show_each_iter:
+                self.show()
         return iter
 
 #Example:
