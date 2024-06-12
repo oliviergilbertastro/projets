@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+
+</style>
+</head>
+
+<body style="margin: 0 !important;
+    padding: 0 !important;overflow: hidden; ">
+
+<canvas id="myCanvas" onclick="Click()" onmousedown="mousedown()" onmousemove="mousepos(event)" width="window.innerWidth;" height="window.innerHeight;" style="background-color:black; "></canvas>
+
+<script>
+
+myCanvas.width = window.innerWidth;
+myCanvas.height = window.innerHeight;
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+var elementToChange = document.getElementsByTagName("body")[0];
+//myCanvas.style.cursor = "grab";
+
+var grass_path = new Image();
+grass_path.src = "file:///C:/Users/olivi/Desktop/maryliseScroller/grassTile.png";
+
+
+
+var reveal = new Date('August 24, 2024 00:00:00');
+var today = new Date();
+
+var timeleft = (reveal - today)-(1000 * 60 * 60);
+var daysleft = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+var hoursleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+var minutesleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24) - hoursleft*(1000 * 60 * 60)) / (1000 * 60));
+var secondsleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24) - hoursleft*(1000 * 60 * 60) - minutesleft*(1000 * 60)) / (1000));
+secondsleft = String(secondsleft).padStart(2, '0');
+minutesleft = String(minutesleft).padStart(2, '0');
+hoursleft = String(hoursleft).padStart(2, '0');
+
+function distance(x1,y1,x2,y2) {
+return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+
+}
+
+var mx;
+var my;
+
+
+var lastposx;
+function mousepos(e){
+
+    mx = e.clientX;
+    my = e.clientY;
+
+
+}
+
+
+var grabbing = false;
+function mousedown() {
+
+
+
+
+}
+
+function Click() {
+
+
+
+}
+
+
+setInterval(function() {
+
+today = new Date();
+timeleft = (reveal - today)-(1000 * 60 * 60);
+daysleft = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+hoursleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+minutesleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24) - hoursleft*(1000 * 60 * 60)) / (1000 * 60));
+secondsleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24) - hoursleft*(1000 * 60 * 60) - minutesleft*(1000 * 60)) / (1000));
+
+secondsleft = String(secondsleft).padStart(2, '0');
+minutesleft = String(minutesleft).padStart(2, '0');
+hoursleft = String(hoursleft).padStart(2, '0');
+
+}, 1000);
+
+
+
+var right = 0;
+var rot = 0;
+var scrollx = 0
+
+function draw() {
+
+ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
+
+
+// Create linear gradient
+grad=ctx.createLinearGradient(0,0,0,myCanvas.height);
+grad.addColorStop(0, "rgb(0,131,255)");
+grad.addColorStop(1, "rgb(0,191,255)");
+
+// Fill rectangle with gradient
+ctx.fillStyle = grad;
+ctx.fillRect(0,0, myCanvas.width, myCanvas.height);
+ctx.fillStyle="rgba(0,0,0,0.7)";
+
+
+for(i=-200;i<myCanvas.width+400;i+=200) {
+ctx.drawImage(grass_path, i-(scrollx%200), myCanvas.height-200, 200, 200)
+}
+
+ctx.fillStyle = "white";
+ctx.font = "50px Arial";
+ctx.fillText("Voyage dans le Maine dans:", myCanvas.width/2-280, 70);
+
+ctx.font = "60px Arial";
+ctx.fillText(daysleft + ":"+hoursleft + ":"+minutesleft + ":"+secondsleft, myCanvas.width/2-120, 150);
+
+
+//ctx.drawImage(face, -60, -50, 120, 100);
+
+
+
+}
+
+
+
+
+
+
+setInterval(function() {
+draw();
+
+scrollx += 1
+
+}, 10);
+
+draw();
+</script>
+</body>
+</html>
