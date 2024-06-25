@@ -2,42 +2,131 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-
-victoires = [
-    "e",
-    "m",
-    "m",
-    "o",
-    "o",
-    "o",
-    "o",
-    "o",
-    "o",
-    "o",
-    "o",
-    "e",
-    "o",
-    "e",
-    "o",
-    "o",
-    "o",
-    "o",
-    "o",
-    "e",
-    "e",
-    "e",
-    "m",
-    "m",
-    "m",
-    "e",
-    "m",
-    "o",
-    "m",
-    "e",
-    "e",
-    "m",
-
+nb_essais_olivier = [
+    5,
+    4,
+    "x",
+    4,
+    3,
+    3,
+    3,
+    4,
+    5,
+    4,
+    4,
+    5,
+    3,
+    5,
+    3,
+    3,
+    4,
+    4,
+    4,
+    4,
+    5,
+    5,
+    5,
+    5,
+    3,
+    "x",
+    4,
+    5,
+    3,
+    4,
+    5,
+    4,
+    2,
+    
 ]
+
+nb_essais_marylise = [
+    5,
+    3,
+    5,
+    5,
+    4,
+    4,
+    4,
+    5,
+    6,
+    5,
+    5,
+    5,
+    4,
+    5,
+    4,
+    4,
+    5,
+    5,
+    5,
+    4,
+    5,
+    5,
+    3,
+    3,
+    3,
+    6,
+    5,
+    4,
+    3,
+    4,
+    4,
+    5,
+    3,
+    
+]
+
+
+assert len(nb_essais_olivier) == len(nb_essais_marylise)
+
+nb_parties = len(nb_essais_olivier)
+
+essais_net_olivier = []
+essais_net_marylise = []
+bar_o = [
+    0,  #1
+    0,  #2
+    0,  #3
+    0,  #4
+    0,  #5,
+    0,  #6,
+    0,  #pas réussi
+]
+bar_m = [
+    0,  #1
+    0,  #2
+    0,  #3
+    0,  #4
+    0,  #5,
+    0,  #6,
+    0,  #pas réussi
+]
+for i in range(nb_parties):
+    #Regarde si je l'ai raté (il y a aussi le cas pour Marylise, mais elle rate jamais):
+    if nb_essais_olivier[i] == "x":
+        essais_net_olivier.append(10)
+        bar_o[6] += 1
+    else:
+        essais_net_olivier.append(nb_essais_olivier[i])
+        bar_o[nb_essais_olivier[i]-1] += 1
+    if nb_essais_marylise[i] == "x":
+        essais_net_marylise.append(10)
+        bar_m[6] += 1
+    else:
+        essais_net_marylise.append(nb_essais_marylise[i])
+        bar_m[nb_essais_marylise[i]-1] += 1
+
+
+
+victoires = []
+for i in range(nb_parties):
+    res = "e"
+    if essais_net_olivier[i] > essais_net_marylise[i]:
+        res = "m"
+    elif essais_net_marylise[i] > essais_net_olivier[i]:
+        res = "o"
+    victoires.append(res)
+
 
 
 marylise_victoires = []
@@ -46,8 +135,22 @@ olivier_victoires = []
 tot_o = 0
 tot_m = 0
 
-parties_jouees =  range(len(victoires))
+tot_essais_o = 0
+tot_essais_m = 0
+tot_essais_o_liste = []
+tot_essais_m_liste = []
+for i in range(nb_parties):
+    tot_essais_o += essais_net_olivier[i]
+    tot_essais_o_liste.append(tot_essais_o)
+    tot_essais_m += essais_net_marylise[i]
+    tot_essais_m_liste.append(tot_essais_m)
 
+
+print("Moyennes d'essais/partie:")
+print(f"Marylise: {tot_essais_m/nb_parties}")
+print(f"Olivier: {tot_essais_o/nb_parties}")
+
+parties_jouees =  range(len(victoires))
 for i in parties_jouees:
     if victoires[i] == "m":
         tot_m += 1
@@ -56,11 +159,31 @@ for i in parties_jouees:
     marylise_victoires.append(tot_m)
     olivier_victoires.append(tot_o)
 
+ax1 = plt.subplot(121)
+ax2 = plt.subplot(122, sharex=ax1)
+ax1.plot(parties_jouees, marylise_victoires, "o-", label="Tannante")
+ax1.plot(parties_jouees, olivier_victoires, "o-", label="Tannant")
+ax1.legend(fontsize=14)
+ax1.set_xlabel("Nombre de parties de faites", fontsize=15)
+ax1.set_ylabel("Nombre de victoires", fontsize=15)
 
-plt.plot(parties_jouees, marylise_victoires, "o-", label="Tannante")
-plt.plot(parties_jouees, olivier_victoires, "o-", label="Tannant")
-plt.legend(fontsize="14")
-plt.xlabel("Nombre de parties de faites", fontsize=15)
-plt.ylabel("Nombre de victoires", fontsize=15)
-plt.title("Compétition féroce de Wordle", fontsize=15)
+
+ax2.plot(parties_jouees, tot_essais_m_liste, "o-", label="Tannante")
+ax2.plot(parties_jouees, tot_essais_o_liste, "o-", label="Tannant")
+ax2.legend(fontsize="14")
+ax2.set_xlabel("Nombre de parties de faites", fontsize=15)
+ax2.set_ylabel("Nombre d'essais", fontsize=15)
+ax2.legend(fontsize=14)
+
+plt.suptitle("Compétition féroce de Wordle", fontsize=15)
+plt.show()
+
+
+width = 0.35
+ax1 = plt.subplot(111)
+ax1.bar(["1","2","3","4","5","6","Pas eu"],bar_m, width=-width, align="edge", label="Tannante")
+ax1.bar(["1","2","3","4","5","6","Pas eu"], bar_o, width=+width, align="edge", label="Tannant")
+ax1.legend(fontsize=14)
+ax1.set_xlabel("# d'essais pour réussir", fontsize=15)
+ax1.set_ylabel("Nombre de parties", fontsize=15)
 plt.show()
