@@ -36,6 +36,15 @@ nb_essais_olivier = [
     5,
     4,
     2,
+    4, # knead
+    4,
+    5,
+    4,
+    5,
+    5, # adage
+    6,
+    5, # thigh
+    5, # debut
     
 ]
 
@@ -73,6 +82,15 @@ nb_essais_marylise = [
     4,
     5,
     3,
+    5, # knead
+    4,
+    3,
+    5,
+    4,
+    4, # adage
+    3,
+    3, # thigh
+    5, # debut
     
 ]
 
@@ -146,6 +164,8 @@ for i in range(nb_parties):
     tot_essais_m_liste.append(tot_essais_m)
 
 
+
+
 print("Moyennes d'essais/partie:")
 print(f"Marylise: {tot_essais_m/nb_parties}")
 print(f"Olivier: {tot_essais_o/nb_parties}")
@@ -159,6 +179,16 @@ for i in parties_jouees:
     marylise_victoires.append(tot_m)
     olivier_victoires.append(tot_o)
 
+print("Total victoires:")
+print(f"Marylise: {tot_m}")
+print(f"Olivier: {tot_o}")
+
+victoires_string = ""
+for i in victoires:
+    victoires_string += "'"+i+"'" + ","
+print(f"victoires = [{victoires_string}]")
+
+fig = plt.gcf()
 ax1 = plt.subplot(121)
 ax2 = plt.subplot(122, sharex=ax1)
 ax1.plot(parties_jouees, marylise_victoires, "o-", label="Tannante")
