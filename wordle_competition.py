@@ -45,6 +45,9 @@ nb_essais_olivier = [
     6,
     5, # thigh
     5, # debut
+    3, # crush
+    5, # scoff
+    3, # canon
     
 ]
 
@@ -91,6 +94,9 @@ nb_essais_marylise = [
     3,
     3, # thigh
     5, # debut
+    4, # crush
+    4, # scoff
+    3, # canon
     
 ]
 
