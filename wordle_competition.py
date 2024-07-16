@@ -48,7 +48,14 @@ nb_essais_olivier = [
     3, # crush
     5, # scoff
     3, # canon
-    
+    3, # shape
+    3, # blare
+    5, # gaunt
+    5, # cameo
+    6, # jiffy
+    5, # enact
+    5, # video
+    4, # swoon
 ]
 
 nb_essais_marylise = [
@@ -97,7 +104,14 @@ nb_essais_marylise = [
     4, # crush
     4, # scoff
     3, # canon
-    
+    4, # shape
+    4, # blare
+    3, # gaunt
+    5, # cameo
+    5, # jiffy
+    4, # enact
+    4, # video
+    4, # swoon
 ]
 
 
@@ -189,10 +203,14 @@ print("Total victoires:")
 print(f"Marylise: {tot_m}")
 print(f"Olivier: {tot_o}")
 
+
+
 victoires_string = ""
 for i in victoires:
     victoires_string += "'"+i+"'" + ","
-print(f"victoires = [{victoires_string}]")
+print(f"var victoires = [{victoires_string}];")
+print(f"var tot_essais_M = {tot_essais_m};")
+print(f"var tot_essais_O = {tot_essais_o};")
 
 fig = plt.gcf()
 ax1 = plt.subplot(121)
