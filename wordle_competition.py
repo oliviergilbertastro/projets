@@ -56,6 +56,8 @@ nb_essais_olivier = [
     5, # enact
     5, # video
     4, # swoon
+    3, # decoy
+    5, # quite
 ]
 
 nb_essais_marylise = [
@@ -112,6 +114,8 @@ nb_essais_marylise = [
     4, # enact
     4, # video
     4, # swoon
+    4, # decoy
+    3, # quite
 ]
 
 
