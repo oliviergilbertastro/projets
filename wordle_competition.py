@@ -59,6 +59,32 @@ nb_essais_olivier = [
     3, # decoy
     5, # quite
     3, # nerdy
+    5, # refer
+    4, # shaft
+    4, # speck
+    4, # cadet
+    4, # prong
+    5, # forte
+    4, # porch
+    "x", # awash
+    4, # juice
+    4, # smock
+    3, # super
+    2, # feral
+    6, # penne
+    3, # chalk
+    5, # flake
+    2, # scale
+    4, # lower
+    4, # ensue
+    2, # anvil
+    5, # macaw
+    5, # saucy
+    3, # ounce
+    3, # medic
+    5, # scone
+    6, # skiff
+    6, # neigh
 ]
 
 nb_essais_marylise = [
@@ -118,6 +144,32 @@ nb_essais_marylise = [
     4, # decoy
     3, # quite
     3, # nerdy
+    5, # refer
+    3, # shaft
+    3, # speck
+    2, # cadet
+    4, # prong
+    4, # forte
+    4, # porch
+    5, # awash
+    3, # juice
+    4, # smock
+    3, # super
+    4, # feral
+    5, # penne
+    3, # chalk
+    5, # flake
+    3, # scale
+    3, # lower
+    4, # ensue
+    3, # anvil
+    5, # macaw
+    4, # saucy
+    3, # ounce
+    3, # medic
+    4, # scone
+    4, # skiff
+    5, # neigh
 ]
 
 

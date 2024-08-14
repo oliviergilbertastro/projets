@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+
+</style>
+</head>
+
+<body style="margin: 0 !important;
+    padding: 0 !important;overflow: hidden; ">
+
+<canvas id="myCanvas" width="window.innerWidth;" height="window.innerHeight;" style="background-color:black; "></canvas>
+
+<script>
+
+myCanvas.width = window.innerWidth;
+myCanvas.height = window.innerHeight;
+
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+
+var victoires = ['e','m','m','o','o','o','o','o','o','o','o','e','o','e','o','o','o','o','o','e','e','e','m','m','e','m','o','m','e','e','m','o','o','o','e','m','o','m','m','m','m','e','o','m','e','o','o','m','e','m','m','m','e','o','m','e','e','m','m','m','e','m','e','m','m','e','e','o','m','e','e','o','m','e','o','e','m','e','e','m','m','m',];
+var tot_essais_M = 333;
+var tot_essais_O = 357;
+
+
+var mode = "default";
+
+var victoires_Marylise = 0;
+var victoires_Olivier = 0;
+
+for (i=0;i<victoires.length;i++) {
+    if (victoires[i] == "m") {
+        victoires_Marylise += 1;
+    }
+    if (victoires[i] == "o") {
+        victoires_Olivier += 1;
+    }
+}
+
+
+
+
+var mouseX = null;
+var mouseY = null;
+var hovering_above_maps = false;
+var hovering_above_yt = false;
+var hovering_above_spotify = false;
+var hovering_above_wordle = false;
+var hovering_above_adventure = false;
+var hovering_above_bible = false;
+var hovering_above_hazard = false;
+var hovering_above_picture = false;
+var bothering_otter = false;
+var dist_between_icons = 10;
+
+var hovering_above_chatMarylise = false;
+var hovering_above_chatOlivier = false;
+
+// left, right, high, bottom
+cat_limits = [70, 70, 160, 750]
+
+c.addEventListener("touchstart", function(event) {
+    mouseX = event.changedTouches[0].pageX;
+    mouseY = event.changedTouches[0].pageY;
+
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75 && mouseY <= myCanvas.height/2+75))) {
+        hovering_above_maps = true;
+    } else {
+        hovering_above_maps = false;
+    }
+    if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75 && mouseY <= myCanvas.height/2+75))) {
+        hovering_above_adventure = true;
+    } else {
+        hovering_above_adventure = false;
+    }
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75+(150+dist_between_icons) && mouseY <= myCanvas.height/2+75+(150+dist_between_icons)))) {
+        hovering_above_yt = true;
+    } else {
+        hovering_above_yt = false;
+    }
+    if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75+(150+dist_between_icons) && mouseY <= myCanvas.height/2+75+(150+dist_between_icons)))) {
+        hovering_above_picture = true;
+    } else {
+        hovering_above_picture = false;
+    }
+
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75-(150+dist_between_icons) && mouseY <= myCanvas.height/2+75-(150+dist_between_icons)))) {
+        hovering_above_spotify = true;
+    } else {
+        hovering_above_spotify = false;
+    }
+    if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75-(150+dist_between_icons) && mouseY <= myCanvas.height/2+75-(150+dist_between_icons)))) {
+        hovering_above_bible = true;
+    } else {
+        hovering_above_bible = false;
+    }
+
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75-(150+dist_between_icons)*2 && mouseY <= myCanvas.height/2+75-(150+dist_between_icons)*2))) {
+        hovering_above_wordle = true;
+    } else {
+        hovering_above_wordle = false;
+    }
+
+    if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75-(150+dist_between_icons)*2 && mouseY <= myCanvas.height/2+75-(150+dist_between_icons)*2))) {
+        hovering_above_hazard = true;
+    } else {
+        hovering_above_hazard = false;
+    }
+
+    if ((mouseX >= myCanvas.width/2-330 && mouseX <= myCanvas.width/2-180) && ((mouseY >= myCanvas.height-290 && mouseY <= myCanvas.height-140))) {
+        bothering_otter = true;
+    } else {
+        bothering_otter = false;
+    }
+
+
+    if ((mouseX >= myCanvas.width-130 && mouseX <= myCanvas.width-10) && (mouseY >= 10 && mouseY <= 130)) {
+        hovering_above_X = true;
+    } else {
+        hovering_above_X = false;
+    }
+    
+    if (mode == "wordle") {
+        if ((mouseX >= cat_limits[0] && mouseX <= myCanvas.width/2-cat_limits[1]) && (mouseY >= myCanvas.height-cat_limits[3] && mouseY <= myCanvas.height-cat_limits[2])) {
+            hovering_above_chatMarylise = true;
+        } else {
+            hovering_above_chatMarylise = false;
+        }
+        if ((mouseX >= myCanvas.width/2+cat_limits[1] && mouseX <= myCanvas.width-cat_limits[0]) && (mouseY >= myCanvas.height-cat_limits[3] && mouseY <= myCanvas.height-cat_limits[2])) {
+            hovering_above_chatOlivier = true;
+        } else {
+            hovering_above_chatOlivier = false;
+        }
+
+    }
+});
+
+
+
+c.addEventListener("touchend", function(event) {
+    if (mode == "default") {
+        if (hovering_above_maps) {
+            onMapsClick();
+        }
+        if (hovering_above_yt) {
+            onYTClick();
+        }
+        if (hovering_above_spotify) {
+            onSpotifyClick();
+        }
+        if (hovering_above_wordle) {
+            onWordleClick();
+        }
+        if (hovering_above_adventure) {
+            onAdventureClick();
+        }
+        if (hovering_above_bible) {
+            onBibleClick();
+        }
+        if (hovering_above_hazard) {
+            onHazardClick();
+        }
+        if (hovering_above_picture) {
+            onCameraClick();
+        }
+    }
+    if (mode == "wordle" || mode == "bible") {
+        if (hovering_above_X) {
+            onXClick();
+        }
+    }
+
+    if (mode == "wordle") {
+        if (hovering_above_chatMarylise) {
+            onMaryliseClick();
+        }
+        if (hovering_above_chatOlivier) {
+            onOlivierClick();
+        }
+    }
+    hovering_above_maps = false;
+    hovering_above_spotify = false;
+    hovering_above_wordle = false;
+    hovering_above_yt = false;
+    hovering_above_X = false;
+    hovering_above_adventure = false;
+    hovering_above_bible = false;
+    hovering_above_hazard = false;
+    hovering_above_picture = false;
+    hovering_above_chatMarylise = false;
+    hovering_above_chatOlivier = false;
+    bothering_otter = false;
+
+
+});
+
+c.addEventListener("touchmove", function(event) {
+    mouseX = event.changedTouches[0].pageX;
+    mouseY = event.changedTouches[0].pageY;
+    event.preventDefault();
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75 && mouseY <= myCanvas.height/2+75))) {
+        hovering_above_maps = true;
+    } else {
+        hovering_above_maps = false;
+    }
+    if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75 && mouseY <= myCanvas.height/2+75))) {
+        hovering_above_adventure = true;
+    } else {
+        hovering_above_adventure = false;
+    }
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75+(150+dist_between_icons) && mouseY <= myCanvas.height/2+75+(150+dist_between_icons)))) {
+        hovering_above_yt = true;
+    } else {
+        hovering_above_yt = false;
+    }
+    if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75+(150+dist_between_icons) && mouseY <= myCanvas.height/2+75+(150+dist_between_icons)))) {
+        hovering_above_picture = true;
+    } else {
+        hovering_above_picture = false;
+    }
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75-(150+dist_between_icons) && mouseY <= myCanvas.height/2+75-(150+dist_between_icons)))) {
+        hovering_above_spotify = true;
+    } else {
+        hovering_above_spotify = false;
+    }
+    if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75-(150+dist_between_icons) && mouseY <= myCanvas.height/2+75-(150+dist_between_icons)))) {
+        hovering_above_bible = true;
+    } else {
+        hovering_above_bible = false;
+    }
+
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75-(150+dist_between_icons)*2 && mouseY <= myCanvas.height/2+75-(150+dist_between_icons)*2))) {
+        hovering_above_wordle = true;
+    } else {
+        hovering_above_wordle = false;
+    }
+    if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75-(150+dist_between_icons)*2 && mouseY <= myCanvas.height/2+75-(150+dist_between_icons)*2))) {
+        hovering_above_hazard = true;
+    } else {
+        hovering_above_hazard = false;
+    }
+
+    if ((mouseX >= myCanvas.width-130 && mouseX <= myCanvas.width-10) && (mouseY >= 10 && mouseY <= 130)) {
+        hovering_above_X = true;
+    } else {
+        hovering_above_X = false;
+    }
+
+
+
+    if ((mouseX >= myCanvas.width/2-330 && mouseX <= myCanvas.width/2-180) && ((mouseY >= myCanvas.height-290 && mouseY <= myCanvas.height-140))) {
+        bothering_otter = true;
+    } else {
+        bothering_otter = false;
+    }
+
+    if (mode == "wordle") {
+        if ((mouseX >= cat_limits[0] && mouseX <= myCanvas.width/2-cat_limits[1]) && (mouseY >= myCanvas.height-cat_limits[3] && mouseY <= myCanvas.height-cat_limits[2])) {
+            hovering_above_chatMarylise = true;
+        } else {
+            hovering_above_chatMarylise = false;
+        }
+        if ((mouseX >= myCanvas.width/2+cat_limits[1] && mouseX <= myCanvas.width-cat_limits[0]) && (mouseY >= myCanvas.height-cat_limits[3] && mouseY <= myCanvas.height-cat_limits[2])) {
+            hovering_above_chatOlivier = true;
+        } else {
+            hovering_above_chatOlivier = false;
+        }
+
+    }
+
+});
+
+
+
+
+var elementToChange = document.getElementsByTagName("body")[0];
+//myCanvas.style.cursor = "grab";
+
+var frame = new Image();
+frame.src = "frame.png";
+var grass_path = new Image();
+grass_path.src = "grass.png";
+var tall_grass = new Image();
+tall_grass.src = "tallgrass.png";
+var train_track = new Image();
+train_track.src = "train_track.png";
+var train = new Image();
+train.src = "train.png";
+var wood_font = new Image();
+wood_font.src = "WoodPressed-5x.png";
+var maps_icon = new Image();
+maps_icon.src = "maps_icon.png";
+var yt_icon = new Image();
+yt_icon.src = "youtube_icon.png";
+var spotify_icon = new Image();
+spotify_icon.src = "spotify_icon.png";
+var wordle_icon = new Image();
+wordle_icon.src = "wordle_icon.png"
+var X_icon = new Image();
+X_icon.src = "X_icon.png"
+var adventure_icon = new Image();
+adventure_icon.src = "adventure_icon.png"
+var bible_icon = new Image();
+bible_icon.src = "bible_icon.png"
+var hazard_icon = new Image();
+hazard_icon.src = "hazard_icon.png";
+var picture_icon = new Image();
+picture_icon.src = "pictureIcon.png";
+
+var background = new Image();
+background.src = "background.png";
+var bible_background = new Image();
+bible_background.src = "bible-background.jpg";
+
+var smoke = new Image();
+smoke.src = "steam_cloud.png";
+var progress_bar = new Image();
+progress_bar.src = "progress_bar_empty.png";
+var progress_juice = new Image();
+progress_juice.src = "bar_juice.png";
+
+var faceOff = new Image();
+faceOff.src = "faceOff2.jpg";
+var wordle_logo = new Image();
+wordle_logo.src = "wordle_logo.png";
+
+var chatMary = new Image();
+chatMary.src = "chatMary.png";
+var chatOli = new Image();
+chatOli.src = "chatOli.png";
+
+var current_player = "a";
+var steam_engine = document.createElement("audio");
+var steam_engine2 = document.createElement("audio");
+steam_engine.volume = 0.3;
+steam_engine2.volume = steam_engine.volume;
+steam_engine.src = "steam_engine.mp3";
+steam_engine2.src = steam_engine.src;
+
+function loopIt(){
+    var player = null;
+
+    if(current_player == "a"){
+        player = steam_engine;
+        current_player = "b";
+    }
+    else{
+        player = steam_engine2;
+        current_player = "a";
+    }
+
+    player.play();
+
+    setTimeout(loopIt, 1746); //5333 is the length of the audio clip in milliseconds.
+}
+
+var photosVoyage = new Array();
+
+for(i=0; i<14; i++) {
+    photosVoyage[i] = new Image();
+    photosVoyage[i].src = `photos/photo${i}.JPG`;
+}
+
+
+var otter_jump = new Array();
+
+for(i=1; i<5; i++) {
+    otter_jump[i-1] = new Image();
+    otter_jump[i-1].src = `otter_sprite/otter_jump_${i}.png`;
+}
+for(i=1; i<4; i++) {
+    otter_jump[i-1+4] = new Image();
+    otter_jump[i-1+4].src = `otter_sprite/otter_land_${i}.png`;
+}
+
+var otter_sleep = new Array();
+
+for(i=1; i<7; i++) {
+    otter_sleep[i-1] = new Image();
+    otter_sleep[i-1].src = `otter_sprite/otter_sleep_${i}.png`;
+}
+
+var otter_idle = new Array();
+
+for(i=1; i<13; i++) {
+    otter_idle[i-1] = new Image();
+    otter_idle[i-1].src = `otter_sprite/otter_idle_alt_${i}.png`;
+}
+
+
+
+var totoro_anim = new Array();
+
+for(i=0; i<26; i++) {
+    totoro_anim[i] = new Image();
+    totoro_anim[i].src = `totoro_sprite/totoro-${i}.png`;
+}
+
+
+var start = new Date('May 13, 2024 00:00:00');
+var reveal = new Date('August 24, 2024 12:00:00');
+var today = new Date();
+
+var total_time = (reveal - start)-(1000 * 60 * 60);
+var total_days = Math.floor(total_time / (1000 * 60 * 60 * 24));
+var timeleft = (reveal - today)-(1000 * 60 * 60);
+var daysleft = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+var hoursleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+var minutesleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24) - hoursleft*(1000 * 60 * 60)) / (1000 * 60));
+var secondsleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24) - hoursleft*(1000 * 60 * 60) - minutesleft*(1000 * 60)) / (1000));
+secondsleft = String(secondsleft).padStart(2, '0');
+minutesleft = String(minutesleft).padStart(2, '0');
+hoursleft = String(hoursleft).padStart(2, '0');
+
+function distance(x1,y1,x2,y2) {
+return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+}
+
+
+
+setInterval(function() {
+
+today = new Date();
+//today = new Date("August 30 2024")
+timeleft = (reveal - today)-(1000 * 60 * 60);
+daysleft = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+hoursleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+minutesleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24) - hoursleft*(1000 * 60 * 60)) / (1000 * 60));
+secondsleft = Math.floor((timeleft - daysleft*(1000 * 60 * 60 * 24) - hoursleft*(1000 * 60 * 60) - minutesleft*(1000 * 60)) / (1000));
+
+secondsleft = String(secondsleft).padStart(2, '0');
+minutesleft = String(minutesleft).padStart(2, '0');
+hoursleft = String(hoursleft).padStart(2, '0');
+
+}, 1000);
+
+
+
+var myFontIndices = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","0","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",":"," "]
+function stringToFont(string) {
+    var font = new Array();
+    for(i=0;i<string.length;i++) {
+        font.push(myFontIndices.indexOf(string[i]));
+    }
+    return font;
+}
+
+function drawText(string, x, y, size, fontImage) {
+    fi = stringToFont(string);
+    for(i=0;i<fi.length;i++) {
+        ctx.drawImage(fontImage, (fi[i]%12)*75, (Math.floor(fi[i]/12))*125, 75, 125, x+(i*65*size), y, 75*size, 125*size)
+    }
+}
+
+function onMapsClick() {
+    window.location.href = 'https://maps.app.goo.gl/PnzWKPRH2qt9uV6PA';
+}
+
+function onYTClick() {
+    window.location.href = 'https://youtube.com/playlist?list=PL5MZXI6Szc1eCArbCFg53r4bPxgvXsKNS&si=7my1zG0uAlkbMgwU';
+}
+
+function onSpotifyClick() {
+    window.location.href = 'https://open.spotify.com/playlist/2nXHXcETr4PY83BvQsAY5v?si=2d41ba65f8554faf';
+}
+
+function onWordleClick() {
+    mode = "wordle";
+    //window.alert("Victoires:\nMarylise:"+victoires_Marylise+"\nOlivier:"+victoires_Olivier)
+}
+
+function onAdventureClick() {
+    window.location.href = 'https://youtu.be/5eepO-MeCPA';
+}
+
+function onHazardClick() {
+    window.location.href = 'https://www.youtube.com/shorts/ekGm9X3c0vg';
+}
+
+function onBibleClick() {
+    mode = "bible";
+}
+
+pov = "Marylise";
+function onMaryliseClick() {
+    pov = "Marylise";
+}
+
+function onOlivierClick() {
+    pov = "Olivier";
+}
+
+
+
+function onXClick() {
+    mode = "default";
+}
+
+allPhotos = new Array();
+var lastindex = 0;
+function onCameraClick() {
+    var index = Math.round(Math.random()*(photosVoyage.length-1));
+    if (index == lastindex) {
+        index = (index+1)%12
+    }
+    lastindex = index;
+
+    allPhotos[allPhotos.length] = new PhotosFrame(photosVoyage[index], myCanvas.width+100, myCanvas.height-650, 0.75)
+    if (allPhotos.length > 6) {
+        allPhotos.splice(0, 1);
+    }
+}
+
+class Smoke_obj {
+    constructor(pos, velocity, size) {
+        this.pos = pos;
+        this.velocity = velocity;
+        this.size = size;
+    }
+    draw_self() {
+        ctx.drawImage(smoke, this.pos[0]-this.size*55, this.pos[1]-this.size*55, this.size*110, this.size*110)
+    }
+    update_pos() {
+        this.pos[0] = this.pos[0] + this.velocity[0]
+        this.pos[1] = this.pos[1] + this.velocity[1]
+        this.size = this.size*decay_rate;
+    }
+}
+
+
+
+
+
+
+function write_multiline_text(text, x, y, fontsize, maxwidth, linespace) {
+    var words = text.split(" ")
+    var chars = 0;
+    var each_line = [""];
+    var current_line = 0;
+    for(i=0;i<words.length;i++) {
+        if (chars + words[i].length > maxwidth) {
+            current_line += 1;
+            each_line[current_line] = "    ";
+            chars = 0;
+        }
+        each_line[current_line] += words[i] + " ";
+        chars += words[i].length + 1;
+    }
+    ctx.font = `italic bold ${fontsize}px Times New Roman`;
+    for(line=0;line<each_line.length;line++) {
+        ctx.fillText(each_line[line], x, y+line*linespace)
+    }
+}
+
+
+class PhotosFrame {
+    constructor(picture, x, y, size) {
+        this.picture = picture;
+        this.x = x;
+        this.y = y;
+        this.size = size;
+    }
+    drawPictureFrame() {
+        ctx.drawImage(this.picture, this.x+50*this.size, this.y+60*this.size, 1536/4.5*this.size, 2048/4.5*this.size)
+        ctx.drawImage(frame, this.x, this.y, 461*this.size, 700*this.size);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+var right = 0;
+var rot = 0;
+var scrollx = 0
+var scaleMary = 1;
+var scaleOli = 1;
+
+function draw() {
+
+ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
+
+
+if (mode == "default") {
+// Create linear gradient
+grad=ctx.createLinearGradient(0,0,0,myCanvas.height);
+grad.addColorStop(0, "rgb(0,131,255)");
+grad.addColorStop(1, "rgb(0,191,255)");
+
+// Fill rectangle with gradient
+ctx.fillStyle = grad;
+ctx.fillStyle="rgb(77,180,221)";
+ctx.fillRect(0,0, myCanvas.width, myCanvas.height);
+ctx.fillStyle="rgba(0,0,0,0.7)";
+
+bg_size = 1.2;
+bg_scrollspeed = 0.5;
+for(x=0;x<2;x+=1) {
+    ctx.drawImage(background, x*(1868*bg_size)-((scrollx*bg_scrollspeed)%(1868*bg_size)), myCanvas.height-(200+560*bg_size), 1868*bg_size, 560*bg_size)
+}
+
+
+for(x=-200;x<myCanvas.width+400;x+=400) {
+    for(y=0;y<200;y+=200) {
+        ctx.drawImage(grass_path, x-(scrollx%400), myCanvas.height-200-y, 400, 200)
+    }
+}
+for(x=-200;x<myCanvas.width+400;x+=50) {
+    ctx.drawImage(tall_grass, x-(scrollx%100), myCanvas.height-245, 50, 50)
+}
+
+
+// Totoro:
+var totoro_scale = 0.6;
+ctx.drawImage(totoro_anim[Math.floor(totoring_time*26/totoring_length)], myCanvas.width/2+1500-(scrollx%(3000)), myCanvas.height-400, 500*totoro_scale, 396*totoro_scale)
+
+// Photos:
+for (i=0;i<allPhotos.length;i++) {
+    allPhotos[i].drawPictureFrame();
+}
+
+
+
+var train_multiplier = 1
+for(x=-200;x<myCanvas.width*2;x+=928*train_multiplier) {
+    ctx.drawImage(train_track, x-(scrollx%(928*train_multiplier)), myCanvas.height-100, 928*train_multiplier, 56*train_multiplier)
+}
+ctx.drawImage(train, myCanvas.width/2-425, myCanvas.height-227, 850*train_multiplier, 200*train_multiplier)
+for(i=0;i<smoke_clouds.length;i++) {
+    smoke_clouds[i].draw_self();
+}
+
+
+//Faut changer ça pour les lettres du font (75px par 125px)
+//ctx.fillStyle = "white";
+//ctx.font = "50px Arial";
+//ctx.fillText("Voyage dans le Maine dans:", myCanvas.width/2-280, 70);
+
+//ctx.font = "60px Arial";
+//ctx.fillText(daysleft + ":"+hoursleft + ":"+minutesleft + ":"+secondsleft, myCanvas.width/2-120, 150);
+if (jumping == false && idling == false) {
+    ctx.drawImage(otter_sleep[Math.floor(time*5)%6], myCanvas.width/2-330, myCanvas.height-290, 150, 150)
+} else if (jumping) {
+    ctx.drawImage(otter_jump[Math.floor(7*(jumpstart_time/jump_length))], myCanvas.width/2-330, myCanvas.height-290-(Math.cos((jumpstart_time-(jump_length/2))/(jump_length/2)*Math.PI/2)*100), 150, 150)
+} else {
+    ctx.drawImage(otter_idle[Math.floor(12*(idle_time/idle_length))], myCanvas.width/2-330, myCanvas.height-290, 150, 150)
+}
+
+drawText("Voyage dans le".toUpperCase(), myCanvas.width/2-380, 20, 0.8, wood_font)
+drawText("Maine dans:".toUpperCase(), myCanvas.width/2-290, 110, 0.8, wood_font)
+drawText(daysleft + ":"+hoursleft + ":"+minutesleft + ":"+secondsleft, myCanvas.width/2-360, 250, 1, wood_font)
+
+var progress_size = 0.5;
+ctx.drawImage(progress_bar, myCanvas.width/2-(1061*progress_size/2), 400, 1061*progress_size, 145*progress_size)
+var percent_progress = (total_time-timeleft)/total_time;
+ctx.drawImage(progress_juice, 0, 0, (1001*percent_progress), 97, myCanvas.width/2-(1001*progress_size/2), 412, 1001*progress_size*percent_progress, 97*progress_size)
+ctx.fillStyle = "black";
+ctx.font = "40px Arial"
+ctx.fillText((Math.round(100*percent_progress))+"%", myCanvas.width/2-(1001*progress_size/2)+1001*progress_size*percent_progress-85, 450)
+
+
+//UI
+ctx.drawImage(maps_icon, 10, myCanvas.height/2-75, 150, 150)
+if (hovering_above_maps) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(30, myCanvas.height/2-55, 110, 110);
+}
+ctx.drawImage(adventure_icon, myCanvas.width-160, myCanvas.height/2-75, 150, 150)
+if (hovering_above_adventure) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(myCanvas.width-140, myCanvas.height/2-55, 110, 110);
+}
+ctx.drawImage(yt_icon, 10, myCanvas.height/2-75+(150+dist_between_icons), 150, 150)
+if (hovering_above_yt) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(30, myCanvas.height/2-55+(150+dist_between_icons), 110, 110);
+}
+ctx.drawImage(picture_icon, myCanvas.width-160, myCanvas.height/2-75+(150+dist_between_icons), 150, 150)
+if (hovering_above_picture) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(myCanvas.width-140, myCanvas.height/2-55+(150+dist_between_icons), 110, 110);
+}
+ctx.drawImage(spotify_icon, 10, myCanvas.height/2-75-(150+dist_between_icons), 150, 150)
+if (hovering_above_spotify) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(30, myCanvas.height/2-55-(150+dist_between_icons), 110, 110);
+}
+ctx.drawImage(wordle_icon, 10, myCanvas.height/2-75-(150+dist_between_icons)*2, 150, 150)
+if (hovering_above_wordle) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(30, myCanvas.height/2-55-(150+dist_between_icons)*2, 110, 110);
+}
+ctx.drawImage(bible_icon, myCanvas.width-160, myCanvas.height/2-75-(150+dist_between_icons), 150, 150)
+if (hovering_above_bible) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(myCanvas.width-140, myCanvas.height/2-55-(150+dist_between_icons), 110, 110);
+}
+ctx.drawImage(hazard_icon, myCanvas.width-160, myCanvas.height/2-75-(150+dist_between_icons)*2, 150, 150)
+if (hovering_above_hazard) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(myCanvas.width-140, myCanvas.height/2-55-(150+dist_between_icons)*2, 110, 110);
+}
+
+
+
+} else if (mode == "wordle") {
+
+
+
+
+    ctx.fillStyle="rgb(26,50,60)";
+    ctx.fillRect(0,0, myCanvas.width, myCanvas.height);
+
+    ctx.drawImage(wordle_logo, myCanvas.width/2-300*1.5, -100, 600*1.5, 315*1.5)
+
+    ctx.drawImage(faceOff, 0, myCanvas.height-myCanvas.width, myCanvas.width, myCanvas.width)
+
+    if (hovering_above_chatMarylise) {
+        if (scaleMary < 1.15) {
+            scaleMary += 0.01;
+        }
+    } else {
+        if (scaleMary > 1) {
+            scaleMary -= 0.01;
+        } else {
+            scaleMary = 1;
+        }
+    }
+    ctx.drawImage(chatMary, 0-(scaleMary-1)*(0.2*myCanvas.width), myCanvas.height-myCanvas.width-(scaleMary-1)*(0.4*myCanvas.width), myCanvas.width*scaleMary, myCanvas.width*scaleMary)
+    if (hovering_above_chatOlivier) {
+        if (scaleOli < 1.15) {
+            scaleOli += 0.01;
+        }
+    } else {
+        if (scaleOli > 1) {
+            scaleOli -= 0.01;
+        } else {
+            scaleOli = 1;
+        }
+    }
+    ctx.drawImage(chatOli, 0-(scaleOli-1)*(0.6*myCanvas.width), myCanvas.height-myCanvas.width-(scaleOli-1)*(0.4*myCanvas.width), myCanvas.width*scaleOli, myCanvas.width*scaleOli)
+
+    // Draw the 100 little boxes of the challenge
+    
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 5;
+    for (line=0;line<10;line++) {
+        for (col=0;col<10;col++) {
+            if (victoires[col+line*10] == "m") {
+                ctx.fillStyle="rgb(31,119,180)";
+                if (pov == "Marylise") {
+                    ctx.fillStyle="rgb(122,181,118)";
+                } else {
+                    ctx.fillStyle="rgb(119,123,126)";
+                }
+            } else if (victoires[col+line*10] == "o") {
+                ctx.fillStyle="rgb(225,117,14)";
+                if (pov == "Marylise") {
+                    ctx.fillStyle="rgb(119,123,126)";
+                } else {
+                    ctx.fillStyle="rgb(122,181,118)";
+                }
+            } else if (victoires[col+line*10] == "e") {
+                ctx.fillStyle="rgb(192,192,192)";
+                ctx.fillStyle="rgb(217,187,68)";
+            } else {
+                ctx.fillStyle="rgb(255,255,255)";
+            }
+            
+            ctx.fillRect(myCanvas.width/2-(70*4.75)+(col*70), 200+(line*60), 40, 40);
+            ctx.strokeRect(myCanvas.width/2-(70*4.75)+(col*70), 200+(line*60), 40, 40);
+        }
+    }
+
+    ctx.font = "500 200px Verdana"
+    if (pov == "Marylise") {
+        ctx.fillStyle="rgb(122,181,118)";
+    } else {
+        ctx.fillStyle="rgb(119,123,126)";
+    }
+
+    ctx.fillRect(myCanvas.width/2-400, myCanvas.height-240, 275, 230)
+    ctx.fillRect(myCanvas.width/2-350, myCanvas.height-330, 175, 100)
+    ctx.fillStyle="rgb(255,255,255)";
+    ctx.fillText(victoires_Marylise, myCanvas.width/2-390, myCanvas.height-50)
+    ctx.font = "500 80px Verdana"
+    ctx.fillText(tot_essais_M, myCanvas.width/2-340, myCanvas.height-250)
+    if (pov == "Marylise") {
+        ctx.fillStyle="rgb(119,123,126)";
+    } else {
+        ctx.fillStyle="rgb(122,181,118)";
+    }
+    ctx.fillRect(myCanvas.width/2+125, myCanvas.height-240, 275, 230)
+    ctx.fillRect(myCanvas.width/2+175, myCanvas.height-330, 175, 100)
+    ctx.fillStyle="rgb(255,255,255)";
+    ctx.font = "500 200px Verdana"
+    ctx.fillText(victoires_Olivier, myCanvas.width/2+135, myCanvas.height-50)
+    ctx.font = "500 80px Verdana"
+    ctx.fillText(tot_essais_O, myCanvas.width/2+185, myCanvas.height-250)
+    ctx.fillStyle="rgb(255,255,255)";
+    ctx.font = "500 100px Verdana"
+    ctx.fillText("vs", myCanvas.width/2-57, myCanvas.height-80)
+
+    
+    //ctx.strokeStyle = "black";
+    //ctx.strokeRect(cat_limits[0], myCanvas.height-cat_limits[3],myCanvas.width/2-(cat_limits[0]+cat_limits[1]), cat_limits[3]-cat_limits[2])
+    //ctx.strokeRect(myCanvas.width/2+cat_limits[1], myCanvas.height-cat_limits[3],myCanvas.width/2-(cat_limits[0]+cat_limits[1]), cat_limits[3]-cat_limits[2])
+
+
+    
+} else if (mode == "bible") {
+    var myScale = (myCanvas.height/bible_background.height);
+    ctx.drawImage(bible_background, myCanvas.width-bible_background.width*myScale, 0, 1000*myScale, 1000*myScale)
+    
+    ctx.font = "italic bold 80px Times New Roman"
+    ctx.fillStyle = "black";
+    ctx.fillText("Phrases mémorables", 45, 180)
+
+
+
+    ctx.font = "italic bold 45px Times New Roman"
+    write_multiline_text('1. The priest will then pronounce the person ceremonially clean by declaring, "You are clean."', 40, 300, fontsize=45, maxwidth=38, linespace=50)
+    write_multiline_text('2. Do not violate your father by having sexual relations with your mother. She is your mother.', 40, 475, fontsize=45, maxwidth=38, linespace=50)
+    write_multiline_text("3. Do you like honey? Don't eat it too much, or it will make you sick!", 40, 650, fontsize=45, maxwidth=38, linespace=50)
+    write_multiline_text('4. A quarrelsome wife is as annoying as constant dripping.', 40, 775, fontsize=45, maxwidth=38, linespace=50)
+    write_multiline_text('5. Now Moses was a very humble man, more humble than anyone else on the face of the earth', 40, 900, fontsize=45, maxwidth=38, linespace=50)
+    write_multiline_text('6. "Go away, baldy!" they chanted. "Go away, baldy!" [...] Then two bears came out of the woods and mauled forty-two of them.', 40, 1075, fontsize=45, maxwidth=38, linespace=50)
+    write_multiline_text('7. Yes, everyone in Moab mourns for the cakes of raisins from Kir-hareseth. They are all gone now.', 40, 1300, fontsize=45, maxwidth=38, linespace=50)
+}
+
+if (mode == "wordle" || mode == "bible") {
+    // ui
+    ctx.drawImage(X_icon, myCanvas.width-130, 10, 120, 120)
+    if (hovering_above_X) {
+        ctx.fillStyle = "rgba(0,0,0,0.4)";
+        ctx.fillRect(myCanvas.width-130, 10, 120, 120);
+    }
+}
+
+}
+
+
+var totoring_time = 0;
+var totoring_length = 4;
+
+
+var jumping = false;
+var jumpstart_time = 0;
+var jump_length = 0.5;
+
+var idling = false;
+var idle_time = 0;
+var idle_length = 1.5;
+setInterval(function() {
+
+    totoring_time += 0.01;
+    if (totoring_time >= totoring_length) {
+        totoring_time = 0;
+    }
+
+if (bothering_otter && jumping == false && idling == false) {
+    jumping = true;
+    jumpstart_time = 0;
+} else if (jumping) {
+    jumpstart_time += 0.01;
+}
+if (jumpstart_time >= jump_length) {
+    jumping = false;
+    jumpstart_time = 0;
+    idling = true;
+}
+if (idling) {
+    idle_time += 0.01;
+}
+if (idle_time >= idle_length) {
+    idling = false;
+    idle_time = 0;
+}
+
+}, 10);
+
+
+var time = 0;
+var smoke_clouds = new Array();
+var rate_of_clouds = 0.2;
+var decay_rate = 0.995;
+setInterval(function() {
+draw();
+
+
+if (time % rate_of_clouds < 0.01) {
+    smoke_clouds.push(new Smoke_obj([myCanvas.width/2+365, myCanvas.height-200], [-1, -(Math.random()*0.5+0.75)], (Math.random()*1.5+0.5)/4))
+}
+shift_delete = 0;
+for (i=0;i<smoke_clouds.length;i++) {
+    smoke_clouds[i].update_pos();
+    if (smoke_clouds[i].size < 0.01) {
+        smoke_clouds.splice(i, 1);
+    }
+}
+
+
+scrollx += 1
+for (i=0;i<allPhotos.length;i++) {
+    allPhotos[i].x -= 1;
+    if (allPhotos[i].x < -1000) {
+        allPhotos.splice(i,1);
+    } 
+}
+time += 0.01
+
+
+}, 10);
+
+draw();
+</script>
+</body>
+</html>
