@@ -86,6 +86,8 @@ nb_essais_olivier = [
     6, # skiff
     6, # neigh
     5, # shore
+    3, # acorn
+    3, # brace
 ]
 
 nb_essais_marylise = [
@@ -172,6 +174,8 @@ nb_essais_marylise = [
     4, # skiff
     5, # neigh
     4, # shore
+    4, # acorn
+    4, # brace
 ]
 
 
