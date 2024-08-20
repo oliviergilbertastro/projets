@@ -207,4 +207,4 @@ universe = Universe(20, 20, 1000, 1, sigma=1000, tres=5000, add_mass=False, appr
 #universe.spacetime[8, 8] += 10000
 universe.next_time()
 universe.show()
-universe.animate(30, fps=30, save=False)
+universe.animate(300, fps=30, save=False)

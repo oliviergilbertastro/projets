@@ -22,9 +22,9 @@ var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
 
-var victoires = ['e','m','m','o','o','o','o','o','o','o','o','e','o','e','o','o','o','o','o','e','e','e','m','m','e','m','o','m','e','e','m','o','o','o','e','m','o','m','m','m','m','e','o','m','e','o','o','m','e','m','m','m','e','o','m','e','e','m','m','m','e','m','e','m','m','e','e','o','m','e','e','o','m','e','o','e','m','e','e','m','m','m','m','o','o','o','e','m',];
-var tot_essais_M = 358;
-var tot_essais_O = 381;
+var victoires = ['e','m','m','o','o','o','o','o','o','o','o','e','o','e','o','o','o','o','o','e','e','e','m','m','e','m','o','m','e','e','m','o','o','o','e','m','o','m','m','m','m','e','o','m','e','o','o','m','e','m','m','m','e','o','m','e','e','m','m','m','e','m','e','m','m','e','e','o','m','e','e','o','m','e','o','e','m','e','e','m','m','m','m','o','o','o','e','m','o',];
+var tot_essais_M = 362;
+var tot_essais_O = 384;
 
 
 var mode = "default";
@@ -54,6 +54,7 @@ var hovering_above_adventure = false;
 var hovering_above_bible = false;
 var hovering_above_hazard = false;
 var hovering_above_picture = false;
+var hovering_above_heart = false;
 var bothering_otter = false;
 var dist_between_icons = 10;
 
@@ -81,6 +82,11 @@ c.addEventListener("touchstart", function(event) {
         hovering_above_yt = true;
     } else {
         hovering_above_yt = false;
+    }
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75+(150+dist_between_icons)*2 && mouseY <= myCanvas.height/2+75+(150+dist_between_icons)*2))) {
+        hovering_above_heart = true;
+    } else {
+        hovering_above_heart = false;
     }
     if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75+(150+dist_between_icons) && mouseY <= myCanvas.height/2+75+(150+dist_between_icons)))) {
         hovering_above_picture = true;
@@ -167,6 +173,13 @@ c.addEventListener("touchend", function(event) {
         if (hovering_above_picture) {
             onCameraClick();
         }
+        if (hovering_above_heart) {
+            if (heart_mode) {
+                heart_mode = false;
+            } else {
+                heart_mode = true;
+            }
+        }
     }
     if (mode == "wordle" || mode == "bible") {
         if (hovering_above_X) {
@@ -193,6 +206,7 @@ c.addEventListener("touchend", function(event) {
     hovering_above_picture = false;
     hovering_above_chatMarylise = false;
     hovering_above_chatOlivier = false;
+    hovering_above_heart = false;
     bothering_otter = false;
 
 
@@ -216,6 +230,11 @@ c.addEventListener("touchmove", function(event) {
         hovering_above_yt = true;
     } else {
         hovering_above_yt = false;
+    }
+    if ((mouseX >= 10 && mouseX <= 160) && ((mouseY >= myCanvas.height/2-75+(150+dist_between_icons)*2 && mouseY <= myCanvas.height/2+75+(150+dist_between_icons)*2))) {
+        hovering_above_heart = true;
+    } else {
+        hovering_above_heart = false;
     }
     if ((mouseX >= myCanvas.width-160 && mouseX <= myCanvas.width-10) && ((mouseY >= myCanvas.height/2-75+(150+dist_between_icons) && mouseY <= myCanvas.height/2+75+(150+dist_between_icons)))) {
         hovering_above_picture = true;
@@ -280,6 +299,8 @@ c.addEventListener("touchmove", function(event) {
 var elementToChange = document.getElementsByTagName("body")[0];
 //myCanvas.style.cursor = "grab";
 
+var heart = new Image();
+heart.src = "heart.png";
 var frame = new Image();
 frame.src = "frame.png";
 var grass_path = new Image();
@@ -310,6 +331,8 @@ var hazard_icon = new Image();
 hazard_icon.src = "hazard_icon.png";
 var picture_icon = new Image();
 picture_icon.src = "pictureIcon.png";
+var heart_icon = new Image();
+heart_icon.src = "heart_icon.png";
 
 var background = new Image();
 background.src = "background.png";
@@ -401,8 +424,8 @@ for(i=0; i<26; i++) {
 }
 
 
-var start = new Date('May 13, 2024 00:00:00');
-var reveal = new Date('August 24, 2024 12:00:00');
+var start = new Date('May 13, 2024 00:00:00 EST');
+var reveal = new Date('August 24, 2024 12:00:00 EST');
 var today = new Date();
 
 var total_time = (reveal - start)-(1000 * 60 * 60);
@@ -515,14 +538,21 @@ function onCameraClick() {
     }
 }
 
+var heart_mode = false;
+
 class Smoke_obj {
     constructor(pos, velocity, size) {
         this.pos = pos;
         this.velocity = velocity;
         this.size = size;
+        if (heart_mode) {
+            this.image = heart;
+        } else {
+            this.image = smoke;
+        }
     }
     draw_self() {
-        ctx.drawImage(smoke, this.pos[0]-this.size*55, this.pos[1]-this.size*55, this.size*110, this.size*110)
+        ctx.drawImage(this.image, this.pos[0]-this.size*55, this.pos[1]-this.size*55, this.size*110, this.size*110)
     }
     update_pos() {
         this.pos[0] = this.pos[0] + this.velocity[0]
@@ -685,6 +715,11 @@ ctx.drawImage(yt_icon, 10, myCanvas.height/2-75+(150+dist_between_icons), 150, 1
 if (hovering_above_yt) {
     ctx.fillStyle = "rgba(0,0,0,0.4)";
     ctx.fillRect(30, myCanvas.height/2-55+(150+dist_between_icons), 110, 110);
+}
+ctx.drawImage(heart_icon, 35, myCanvas.height/2-75+(150+dist_between_icons)*2+25, 100, 100)
+if (hovering_above_heart) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
+    ctx.fillRect(30, myCanvas.height/2-55+(150+dist_between_icons)*2, 110, 110);
 }
 ctx.drawImage(picture_icon, myCanvas.width-160, myCanvas.height/2-75+(150+dist_between_icons), 150, 150)
 if (hovering_above_picture) {

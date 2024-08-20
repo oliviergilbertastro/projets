@@ -91,6 +91,7 @@ nb_essais_olivier = [
     3, # storm
     5, # lanky
     5, # meter
+    3, # delay
 ]
 
 nb_essais_marylise = [
@@ -182,6 +183,7 @@ nb_essais_marylise = [
     4, # storm
     5, # lanky
     4, # meter
+    4, # delay
 ]
 
 
