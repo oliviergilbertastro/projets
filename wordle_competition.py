@@ -90,6 +90,7 @@ nb_essais_olivier = [
     3, # brace
     3, # storm
     5, # lanky
+    5, # meter
 ]
 
 nb_essais_marylise = [
@@ -180,6 +181,7 @@ nb_essais_marylise = [
     4, # brace
     4, # storm
     5, # lanky
+    4, # meter
 ]
 
 
