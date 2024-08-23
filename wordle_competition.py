@@ -94,6 +94,7 @@ nb_essais_olivier = [
     3, # delay
     4, # mulch
     3, # brute
+    2, # leech
 ]
 
 nb_essais_marylise = [
@@ -188,6 +189,7 @@ nb_essais_marylise = [
     4, # delay
     4, # mulch
     3, # brute
+    4, # leech
 ]
 
 
