@@ -93,6 +93,7 @@ nb_essais_olivier = [
     5, # meter
     3, # delay
     4, # mulch
+    3, # brute
 ]
 
 nb_essais_marylise = [
@@ -186,6 +187,7 @@ nb_essais_marylise = [
     4, # meter
     4, # delay
     4, # mulch
+    3, # brute
 ]
 
 
