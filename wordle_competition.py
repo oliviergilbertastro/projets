@@ -95,6 +95,15 @@ nb_essais_olivier = [
     4, # mulch
     3, # brute
     2, # leech
+    3, # filet
+    6, # skate
+    4, # stake
+    3, # crown
+    3, # lithe
+    3, # flunk
+    6, # spout
+    5, # mushy
+
 ]
 
 nb_essais_marylise = [
@@ -190,6 +199,14 @@ nb_essais_marylise = [
     4, # mulch
     3, # brute
     4, # leech
+    3, # filet
+    5, # skate
+    3, # stake
+    3, # crown
+    4, # lithe
+    5, # flunk
+    5, # spout
+    'x', # mushy
 ]
 
 
