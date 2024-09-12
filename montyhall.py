@@ -43,7 +43,7 @@ def monty_hall(chosen_door, nb_of_doors=3, switch_door=True):
 sample_size = 100000
 wins = 0
 for i in tqdm(range(sample_size)):
-    if monty_hall(0, nb_of_doors=3, switch_door=True):
+    if monty_hall(0, nb_of_doors=40, switch_door=True):
         wins += 1
 print(wins/sample_size)
 
