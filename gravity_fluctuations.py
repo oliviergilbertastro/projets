@@ -117,7 +117,10 @@ class Universe():
         plt.show()
 
         if save:
-            anim.save(uniquify('animations\\animation.mp4'), fps=fps, extra_args=['-vcodec', 'libx264'])
+            try:
+                anim.save(uniquify('animations\\animation.mp4'), fps=fps, extra_args=['-vcodec', 'libx264'])
+            except:
+                anim.save(uniquify('animations\\animation.mp4'), fps=fps)
 
     def next_time(self):
         next_spacetime = self.spacetime.copy()
@@ -207,4 +210,4 @@ universe = Universe(20, 20, 1000, 1, sigma=1000, tres=5000, add_mass=False, appr
 #universe.spacetime[8, 8] += 10000
 universe.next_time()
 universe.show()
-universe.animate(300, fps=30, save=True)
+universe.animate(100, fps=30, save=True)
