@@ -40,7 +40,7 @@ def monty_hall(chosen_door, nb_of_doors=3, switch_door=True):
     return doors[chosen_door] == 1
 
 
-sample_size = 100000
+sample_size = 1000000
 wins = 0
 for i in tqdm(range(sample_size)):
     if monty_hall(0, nb_of_doors=3, switch_door=True):
