@@ -29,11 +29,17 @@ def get_peaks_indices(valeurs: np.array,
 peaks = get_peaks_indices(values, hauteur_minimum=1.3)
 
 ecart_entre_chaque = []
+duree_chaque = []
 for i in range(len(peaks)-1):
     ecart_entre_chaque.append(dates[peaks][i+1]-dates[peaks][i])
 
+
+values = values*29.5735 # en mL
+
 print(f"Écart entre chaque journée max = {np.mean(ecart_entre_chaque)} +/- {np.std(ecart_entre_chaque)} jours")
-print(f"mL moyen par fois: {29.5735*np.sum(values)/len(peaks)}")
-plt.plot(dates[peaks],values[peaks],"o")
+print(f"mL moyen par fois: {np.sum(values)/len(peaks)}")
 plt.plot(dates, values)
+plt.plot(dates[peaks],values[peaks],"o")
+plt.xlabel("Jours", fontsize=16)
+plt.ylabel("mL", fontsize=16)
 plt.show()
