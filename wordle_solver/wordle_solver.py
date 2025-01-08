@@ -41,6 +41,13 @@ def bad_letter(letter, dictionnary):
     dictionnary: list of words currently possible
     Returns updated list of words fitting the constraint
     """
+    try:
+        if len(letter)>1:
+            for i in range(len(letter)-1):
+                dictionnary = bad_letter(letter[-1], dictionnary)
+                letter = letter[:-1]
+    except:
+        pass
     valid_words = []
     for i in range(len(dictionnary)):
         letter_in_word = False
@@ -55,11 +62,10 @@ def bad_letter(letter, dictionnary):
 if __name__ == "__main__":
     words = get_words()
 
-    # Start reducing sample for example word "SCOPE"
-    # Let's say we try CHAOS
-    words = unplaced_letter("C", words)
-    words = unplaced_letter("O", words)
-    words = unplaced_letter("S", words)
+    # Start reducing sample for example word "DRAFT"
+    # Let's say we try STAGE
+    words = placed_letter("A", 2, words)
+    words = unplaced_letter("T", words)
     words = bad_letter("A", words)
     words = bad_letter("H", words)
     print(words)
