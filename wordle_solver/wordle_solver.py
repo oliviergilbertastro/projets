@@ -55,10 +55,11 @@ def bad_letter(letter, dictionnary):
 if __name__ == "__main__":
     words = get_words()
 
-    # Start reducing sample
+    # Start reducing sample for example word "SCOPE"
+    # Let's say we try CHAOS
+    words = unplaced_letter("C", words)
+    words = unplaced_letter("O", words)
     words = unplaced_letter("S", words)
-    words = placed_letter("C", 1, words)
-    words = bad_letter("I", words)
-    words = bad_letter("W", words)
-    words = bad_letter("U", words)
+    words = bad_letter("A", words)
+    words = bad_letter("H", words)
     print(words)
