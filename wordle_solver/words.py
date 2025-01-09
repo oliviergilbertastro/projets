@@ -5,8 +5,10 @@ probs = [
 ]
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+import numpy as np
+import copy
 
-def get_words(n_letters=5, probability=True):
+def get_data(n_letters=5, probability=True):
     """
     n_letters: number of letters you want in each word
     probability: return a matched-length list of the probability for each word
@@ -33,8 +35,19 @@ def get_words(n_letters=5, probability=True):
         for k in words[i]:
             likelihood = likelihood*probs[alphabet.index(k)]
         likelihoods.append(likelihood)
-
+    old_likelihoods = copy.deepcopy(likelihoods)
+    likelihoods.sort(reverse=True)
+    new_words = []
+    for i in range(len(words)):
+        try:
+            if likelihoods[i] != likelihoods[i+1]:
+                new_words.append(words[old_likelihoods.index(likelihoods[i])])
+        except:
+            new_words.append(words[old_likelihoods.index(likelihoods[i])])
+    words = new_words
+    likelihoods = np.array(likelihoods)/np.sum(likelihoods)
+    words = list(dict.fromkeys(words))
     return [words, likelihoods]
 
 if __name__ == "__main__":
-    print(get_words())
+    print(get_data())
