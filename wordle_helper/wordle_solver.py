@@ -81,6 +81,9 @@ class WordleSolver():
         for i in range(len(self.data[0])):
             print(f"{self.data[0][i]} : {np.around(self.data[1][i]*100, decimals=3)}%")
 
+    def solved(self):
+        return len(self.data[0]) == 1
+
 
 
 if __name__ == "__main__":

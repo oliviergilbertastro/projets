@@ -15,7 +15,7 @@ def get_data(n_letters=5, probability=True):
 
     returns a list of two lists [words, probability]
     """
-    words_raw = open("wordle_solver/words.txt").readlines()
+    words_raw = open("wordle_helper/words.txt").readlines()
     words = []
     for i in range(len(words_raw)):
         curr_word = ""

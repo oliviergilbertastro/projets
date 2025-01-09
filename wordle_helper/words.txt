@@ -19182,6 +19182,7 @@ cwt
 cyan/M
 cyanide/M
 cyanobacteria
+cyber
 cyberbully/SM
 cybercafe/S
 cybernetic/S
