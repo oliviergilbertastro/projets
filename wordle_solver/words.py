@@ -46,7 +46,6 @@ def get_data(n_letters=5, probability=True):
             new_words.append(words[old_likelihoods.index(likelihoods[i])])
     words = new_words
     likelihoods = np.array(likelihoods)/np.sum(likelihoods)
-    words = list(dict.fromkeys(words))
     return [words, likelihoods]
 
 if __name__ == "__main__":

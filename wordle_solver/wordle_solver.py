@@ -72,6 +72,9 @@ class WordleSolver():
 
     def best_word(self):
         return self.data[0][(list(self.data[1]).index(np.max(self.data[1])))]
+    
+    def prob_of_word(self, word):
+        return self.data[1][self.data[0].index(word)]
 
     def print_word_bank(self):
         print("---------------")
@@ -85,16 +88,11 @@ if __name__ == "__main__":
 
     # Start reducing sample for example word "DRAFT"
     # Let's say we try STAGE
-    Wordle.print_word_bank()
-    print(Wordle.best_word())
     Wordle.placed_letter("A", 2)
     Wordle.unplaced_letter("T", 1)
     Wordle.bad_letter("SGE")
-    
-    print(Wordle.best_word())
     # Let's try TRACK
     Wordle.unplaced_letter("T", 0)
     Wordle.placed_letter("R", 1)
     Wordle.bad_letter("CK")
     Wordle.print_word_bank()
-    print(Wordle.best_word())
