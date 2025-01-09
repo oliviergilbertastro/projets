@@ -39,6 +39,8 @@ class WordleSolver():
             for k in range(len(word_bank[i])):
                 if word_bank[i][k] == letter and k != position:
                     letter_in_word = True
+            if word_bank[i][position] == letter:
+                letter_in_word = False
             if letter_in_word:
                 valid_words.append(word_bank[i])
                 valid_likelihoods.append(self.data[1][i])
