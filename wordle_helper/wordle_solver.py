@@ -2,12 +2,30 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from words import get_data
+import copy
+import random
 
+def print_color(message, color="yellow", **kwargs):
+    """print(), but with a color option"""
+    possible_colors = ["black","red","green","yellow","blue","magenta","cyan","white"]
+    if color == None or color == "grey":
+        color = "0"
+    elif type(color) == str:
+        color = color.lower()
+        if color in possible_colors:
+            color = str(possible_colors.index(color)+30)
+        else:
+            print(f"Color '{color}' not implemented, defaulting to grey.\nPossible colors are: {['grey']+possible_colors}")
+            color = "0"
+    else:
+        raise ValueError(f"Parameter 'header_color' needs to be a string.")
+    print(f"\x1b[{color}m{message}\x1b[0m", **kwargs)
 
 class WordleSolver():
 
     def __init__(self, data):
-        self.data = data
+        self.untouched_data = copy.deepcopy(data)
+        self.reset()
 
     def placed_letter(self, letter, position):
         """
@@ -85,6 +103,38 @@ class WordleSolver():
 
     def solved(self):
         return len(self.data[0]) == 1
+    
+    def try_word(self, word):
+        self.tries.append(word)
+
+    def reset(self):
+        self.tries = []
+        self.data = copy.copy(self.untouched_data)
+        self.word = self.data[0][random.randint(0, len(self.data[0])-1)]
+
+    def play_console(self):
+        solved = False
+        while not solved:
+            word = input("Enter a 5-letter word:\n").upper()
+            self.tries.append(word)
+            solved = word == self.word
+            print("--------")
+            for i in range(len(self.tries)):
+                for k, letter in enumerate(self.tries[i]):
+                    if letter == self.word[k]:
+                        print_color(letter, color="green", end="")
+                    elif letter in self.word:
+                        print_color(letter, color="yellow", end="")
+                    else:
+                        print(letter, end="")
+                print("")
+            for i in range(len(self.tries), 6):
+                print("_____")
+            if len(self.tries) >= 6:
+                print("You lost :(")
+                return 0
+        print(f"You won in {len(self.tries)} tries!")
+        return 1
 
 
 
