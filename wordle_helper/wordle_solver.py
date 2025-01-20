@@ -25,6 +25,7 @@ class WordleSolver():
 
     def __init__(self, data):
         self.untouched_data = copy.deepcopy(data)
+        self.n_letters = len(data[0][0])
         self.reset()
 
     def placed_letter(self, letter, position):
@@ -131,7 +132,7 @@ class WordleSolver():
         solved = False
         while not solved:
             if inputs == "console":
-                word = input("Enter a 5-letter word:\n").upper()
+                word = input(f"Enter a {self.n_letters}-letter word:\n").upper()
             else:
                 if len(self.tries) == 0:
                     word = first_word
@@ -152,10 +153,10 @@ class WordleSolver():
                             print(letter, end="")
                     print("")
                 for i in range(len(self.tries), 6):
-                    print("_____")
+                    print("_"*self.n_letters)
             if len(self.tries) >= 6 and word != self.word:
                 if verbose:
-                    print("You lost :(")
+                    print(f"You lost :(\nThe word was {self.word}")
                 return 10
         if verbose:
             print(f"You won in {len(self.tries)} tries!")
