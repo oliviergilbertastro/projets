@@ -127,36 +127,39 @@ class WordleSolver():
         self.data = copy.copy(self.untouched_data)
         self.word = self.data[0][random.randint(0, len(self.data[0])-1)]
 
-    def play_console(self, inputs="console"):
+    def play_console(self, inputs="console", first_word="CRANE", verbose=True):
         solved = False
         while not solved:
             if inputs == "console":
                 word = input("Enter a 5-letter word:\n").upper()
             else:
                 if len(self.tries) == 0:
-                    word = "CRANE"
+                    word = first_word
                 else:
                     word = self.best_word()
                 self.try_word(word=word)
             self.tries.append(word)
             solved = word == self.word
-            print("--------")
-            for i in range(len(self.tries)):
-                for k, letter in enumerate(self.tries[i]):
-                    if letter == self.word[k]:
-                        print_color(letter, color="green", end="")
-                    elif letter in self.word:
-                        print_color(letter, color="yellow", end="")
-                    else:
-                        print(letter, end="")
-                print("")
-            for i in range(len(self.tries), 6):
-                print("_____")
+            if verbose:
+                print("--------")
+                for i in range(len(self.tries)):
+                    for k, letter in enumerate(self.tries[i]):
+                        if letter == self.word[k]:
+                            print_color(letter, color="green", end="")
+                        elif letter in self.word:
+                            print_color(letter, color="yellow", end="")
+                        else:
+                            print(letter, end="")
+                    print("")
+                for i in range(len(self.tries), 6):
+                    print("_____")
             if len(self.tries) >= 6 and word != self.word:
-                print("You lost :(")
-                return 0
-        print(f"You won in {len(self.tries)} tries!")
-        return 1
+                if verbose:
+                    print("You lost :(")
+                return 10
+        if verbose:
+            print(f"You won in {len(self.tries)} tries!")
+        return len(self.tries)
 
 
 
