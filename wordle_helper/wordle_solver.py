@@ -105,17 +105,39 @@ class WordleSolver():
         return len(self.data[0]) == 1
     
     def try_word(self, word):
-        self.tries.append(word)
+        bad_letters = []
+        placed_letters = []
+        unplaced_letters = []
+        for k, letter in enumerate(word):
+            if letter == self.word[k]:
+                placed_letters.append((letter, k))
+            elif letter in self.word:
+                unplaced_letters.append((letter, k))
+            else:
+                bad_letters.append((letter))
+        for i in range(len(placed_letters)):
+            self.placed_letter(placed_letters[i][0],placed_letters[i][1])
+        for i in range(len(unplaced_letters)):
+            self.unplaced_letter(unplaced_letters[i][0],unplaced_letters[i][1])
+        for i in range(len(bad_letters)):
+            self.bad_letter(bad_letters[i])
 
     def reset(self):
         self.tries = []
         self.data = copy.copy(self.untouched_data)
         self.word = self.data[0][random.randint(0, len(self.data[0])-1)]
 
-    def play_console(self):
+    def play_console(self, inputs="console"):
         solved = False
         while not solved:
-            word = input("Enter a 5-letter word:\n").upper()
+            if inputs == "console":
+                word = input("Enter a 5-letter word:\n").upper()
+            else:
+                if len(self.tries) == 0:
+                    word = "CRANE"
+                else:
+                    word = self.best_word()
+                self.try_word(word=word)
             self.tries.append(word)
             solved = word == self.word
             print("--------")
@@ -130,7 +152,7 @@ class WordleSolver():
                 print("")
             for i in range(len(self.tries), 6):
                 print("_____")
-            if len(self.tries) >= 6:
+            if len(self.tries) >= 6 and word != self.word:
                 print("You lost :(")
                 return 0
         print(f"You won in {len(self.tries)} tries!")

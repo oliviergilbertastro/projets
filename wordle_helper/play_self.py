@@ -1,0 +1,8 @@
+from words import get_data
+from wordle_solver import WordleSolver
+
+N_LETTERS = 5
+
+Wordle = WordleSolver(get_data(n_letters=N_LETTERS))
+
+Wordle.play_console(inputs="self")
