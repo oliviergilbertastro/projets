@@ -4,7 +4,7 @@ from tqdm import tqdm
 import numpy as np
 N_LETTERS = 5
 
-nb_of_words = 10
+nb_of_words = 20
 nb_of_games = 50
 
 first_words = np.array(get_data(n_letters=N_LETTERS)[0])
