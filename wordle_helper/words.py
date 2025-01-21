@@ -8,6 +8,13 @@ alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 import numpy as np
 import copy
 
+def sum_letters(letter, word):
+    res = 0
+    for l in word:
+        if l == letter:
+            res += 1
+    return res
+
 def get_data(n_letters=5, probability=True):
     """
     n_letters: number of letters you want in each word
@@ -34,6 +41,7 @@ def get_data(n_letters=5, probability=True):
         likelihood = 1
         for k in words[i]:
             likelihood = likelihood*probs[alphabet.index(k)]
+            likelihood = likelihood*sum_letters(words[i][k], words[i])
         likelihoods.append(likelihood)
     old_likelihoods = copy.deepcopy(likelihoods)
     likelihoods.sort(reverse=True)
