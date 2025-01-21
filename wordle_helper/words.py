@@ -41,7 +41,7 @@ def get_data(n_letters=5, probability=True):
         likelihood = 1
         for k in words[i]:
             likelihood = likelihood*probs[alphabet.index(k)]
-            likelihood = likelihood*sum_letters(words[i][k], words[i])
+            likelihood = likelihood/sum_letters(k, words[i])
         likelihoods.append(likelihood)
     old_likelihoods = copy.deepcopy(likelihoods)
     likelihoods.sort(reverse=True)

@@ -46,8 +46,10 @@ tries = 0
 
 print("Try a word in WORDLE and answer the following questions:")
 while not solved:
+    #print(Wordle.best_word(verbose=True))
     tries += 1
     if tries > 1:
+        Wordle.print_word_bank()
         print(f"Try another word! You could try the word {Wordle.best_word()}.\n")
     word = input("What is your word?\n").upper()
     colors = []

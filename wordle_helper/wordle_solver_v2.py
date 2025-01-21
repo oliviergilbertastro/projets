@@ -53,7 +53,9 @@ class WordleSolver():
         self.data = [valid_words, np.array(valid_likelihoods)/np.sum(valid_likelihoods)]
 
 
-    def best_word(self):
+    def best_word(self, verbose=False):
+        if verbose:
+            print(np.max(self.data[1]))
         return self.data[0][(list(self.data[1]).index(np.max(self.data[1])))]
     
     def prob_of_word(self, word):
