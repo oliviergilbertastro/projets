@@ -45,6 +45,7 @@ solved = False
 tries = 0
 
 print("Try a word in WORDLE and answer the following questions:")
+print(f"You could start with the word {Wordle.best_word()}.\n")
 while not solved:
     #print(Wordle.best_word(verbose=True))
     tries += 1
