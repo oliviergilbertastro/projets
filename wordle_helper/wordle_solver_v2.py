@@ -36,68 +36,22 @@ class WordleSolver():
         self.n_letters = len(data[0][0])
         self.reset()
 
-    def placed_letter(self, letter, position):
+    def letter_info(self, letter, position, good=True):
         """
         letter: letter you have information on
         position: index of the letter
-        dictionnary: list of words currently possible
-        Returns updated list of words fitting the constraint
+        good: True->letter at this place, False->letter not at this place
+        Updates list of words fitting the constraint
         """
         word_bank = self.data[0]
         valid_words = []
         valid_likelihoods = []
         for i in range(len(word_bank)):
-            if word_bank[i][position] == letter:
+            if (word_bank[i][position] == letter) == good:
                 valid_words.append(word_bank[i])
                 valid_likelihoods.append(self.data[1][i])
         self.data = [valid_words, np.array(valid_likelihoods)/np.sum(valid_likelihoods)]
 
-    def unplaced_letter(self, letter, position):
-        """
-        letter: letter you have information on
-        dictionnary: list of words currently possible
-        Returns updated list of words fitting the constraint
-        """
-        word_bank = self.data[0]
-        valid_words = []
-        valid_likelihoods = []
-        for i in range(len(word_bank)):
-            letter_in_word = False
-            for k in range(len(word_bank[i])):
-                if word_bank[i][k] == letter and k != position:
-                    letter_in_word = True
-            if word_bank[i][position] == letter:
-                letter_in_word = False
-            if letter_in_word:
-                valid_words.append(word_bank[i])
-                valid_likelihoods.append(self.data[1][i])
-        self.data = [valid_words, np.array(valid_likelihoods)/np.sum(valid_likelihoods)]
-
-    def bad_letter(self, letter):
-        """
-        letter: letter you have information on
-        dictionnary: list of words currently possible
-        Returns updated list of words fitting the constraint
-        """
-        try:
-            if len(letter)>1:
-                for i in range(len(letter)-1):
-                    self.bad_letter(letter[-1])
-                    letter = letter[:-1]
-        except:
-            pass
-        word_bank = self.data[0]
-        valid_words = []
-        valid_likelihoods = []
-        for i in range(len(word_bank)):
-            letter_in_word = False
-            for k in range(len(word_bank[i])):
-                if word_bank[i][k] == letter:
-                    letter_in_word = True
-            if letter_in_word == False:
-                valid_words.append(word_bank[i])
-                valid_likelihoods.append(self.data[1][i])
-        self.data = [valid_words, np.array(valid_likelihoods)/np.sum(valid_likelihoods)]
 
     def best_word(self):
         return self.data[0][(list(self.data[1]).index(np.max(self.data[1])))]
@@ -109,6 +63,7 @@ class WordleSolver():
         print("---------------")
         for i in range(len(self.data[0])):
             print(f"{self.data[0][i]} : {np.around(self.data[1][i]*100, decimals=3)}%")
+        print(f"\nTotal of {len(self.data[0])} words.")
 
     def solved(self):
         return len(self.data[0]) == 1
@@ -122,12 +77,52 @@ class WordleSolver():
         1: yellow
         2: green
         """
+        word = word.upper()
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         count = []
+        # Count the number of each letters in the word you tried
         for i in range(len(alphabet)):
-            count.append(sum_letters(alphabet[i], word.upper()))
-
-        print(count)
+            count.append(sum_letters(alphabet[i], word))
+        # Count the min/max of each letters in the word
+        min_max = []
+        for i in range(len(count)):
+            if count[i] != 0:
+                cmm = [0,len(word)]
+                for k in range(len(word)):
+                    if word[k] == alphabet[i]:
+                        if word_colors[k] == 2 or word_colors[k] == 1:
+                            cmm[0] += 1
+                            if cmm[1] != len(word):
+                                cmm[1] = cmm[0]
+                        else:
+                            cmm[1] = cmm[0]
+                    else:
+                        pass
+                min_max.append(cmm)
+            else:
+                min_max.append([0,len(word)])
+        # Shorten word list with info on specific positions:
+        for k in range(len(word)):
+            if word_colors[k] == 2:
+                self.letter_info(word[k], k, good=True)
+            else:
+                self.letter_info(word[k], k, good=False)
+        # Shorten word list with info on number of letters:
+        word_bank = self.data[0]
+        valid_words = []
+        valid_likelihoods = []
+        for i in range(len(word_bank)):
+            valid = True
+            for k in range(len(alphabet)):
+                sum = sum_letters(alphabet[k], word_bank[i])
+                if sum >= min_max[k][0] and sum <= min_max[k][1]:
+                    pass
+                else:
+                    valid = False
+            if valid:
+                valid_words.append(word_bank[i])
+                valid_likelihoods.append(self.data[1][i])
+        self.data = [valid_words, np.array(valid_likelihoods)/np.sum(valid_likelihoods)]
 
 
     def reset(self):
@@ -173,4 +168,7 @@ class WordleSolver():
 
 if __name__ == "__main__":
     Wordle = WordleSolver(get_data())
-    Wordle.try_word("apple")
+    # Start reducing sample for example word "DRAFT"
+    # Let's say we try STAGE
+    Wordle.try_word("STAGE", [0,1,2,0,0])
+    Wordle.print_word_bank()
