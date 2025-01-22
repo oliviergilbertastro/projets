@@ -1,5 +1,5 @@
 from words import get_data
-from wordle_solver import WordleSolver
+from wordle_solver_v2 import WordleSolver
 
 N_LETTERS = 5
 

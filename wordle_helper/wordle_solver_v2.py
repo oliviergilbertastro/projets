@@ -133,17 +133,40 @@ class WordleSolver():
         self.data = copy.copy(self.untouched_data)
         self.word = self.data[0][random.randint(0, len(self.data[0])-1)]
 
-    def play_console(self, inputs="console", first_word="CRANE", verbose=True):
+    def play_console(self, inputs="console", first_word=None, verbose=True):
         solved = False
         while not solved:
             if inputs == "console":
                 word = input(f"Enter a {self.n_letters}-letter word:\n").upper()
             else:
-                if len(self.tries) == 0:
+                if len(self.tries) == 0 and first_word != None:
                     word = first_word
                 else:
                     word = self.best_word()
-                self.try_word(word=word)
+                letter_dict = {}
+                word_colors = [0,0,0,0,0]
+                for k, letter in enumerate(word):
+                    if letter == self.word[k]:
+                        if letter in letter_dict:
+                            letter_dict[letter] += 1
+                        else:
+                            letter_dict[letter] = 1
+                        word_colors[k] = 2
+                for k, letter in enumerate(word):
+                    if letter == self.word[k]:
+                        pass
+                    elif letter in self.word and letter:
+                        if letter in letter_dict:
+                            letter_dict[letter] += 1
+                        else:
+                            letter_dict[letter] = 1
+                        if sum_letters(letter, self.word) >= letter_dict[letter]:
+                            word_colors[k] = 1
+                        else:
+                            word_colors[k] = 0
+                    else:
+                        word_colors[k] = 0
+                self.try_word(word=word, word_colors=word_colors)
             self.tries.append(word)
             solved = word == self.word
             if verbose:
@@ -188,10 +211,16 @@ class WordleSolver():
                     print("_"*self.n_letters)
             if len(self.tries) >= 6 and word != self.word:
                 if verbose:
-                    print(f"You lost :(\nThe word was {self.word}")
+                    if inputs == "console":
+                        print(f"You lost :(\nThe word was {self.word}")
+                    else:
+                        print(f"Failed. The word was {self.word}")
                 return self.L_penalty
         if verbose:
-            print(f"You won in {len(self.tries)} tries!")
+            if inputs == "console":
+                print(f"You won in {len(self.tries)} tries!")
+            else:
+                print(f"Succeeded in {len(self.tries)} tries!")
         return len(self.tries)
 
 
