@@ -148,10 +148,37 @@ class WordleSolver():
             if verbose:
                 print("--------")
                 for i in range(len(self.tries)):
+                    letter_dict = {}
+                    word_colors = [0,0,0,0,0]
                     for k, letter in enumerate(self.tries[i]):
                         if letter == self.word[k]:
+                            if letter in letter_dict:
+                                letter_dict[letter] += 1
+                            else:
+                                letter_dict[letter] = 1
+                            #print_color(letter, color="green", end="")
+                            word_colors[k] = 2
+                    for k, letter in enumerate(self.tries[i]):
+                        if letter == self.word[k]:
+                            pass
+                        elif letter in self.word and letter:
+                            if letter in letter_dict:
+                                letter_dict[letter] += 1
+                            else:
+                                letter_dict[letter] = 1
+                            if sum_letters(letter, self.word) >= letter_dict[letter]:
+                                #print_color(letter, color="yellow", end="")
+                                word_colors[k] = 1
+                            else:
+                                #print(letter, end="")
+                                word_colors[k] = 0
+                        else:
+                            #print(letter, end="")
+                            word_colors[k] = 0
+                    for k, letter in enumerate(self.tries[i]):
+                        if word_colors[k] == 2:
                             print_color(letter, color="green", end="")
-                        elif letter in self.word:
+                        elif word_colors[k] == 1:
                             print_color(letter, color="yellow", end="")
                         else:
                             print(letter, end="")
