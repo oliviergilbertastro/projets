@@ -1,14 +1,15 @@
 from words import get_data
-from wordle_solver import WordleSolver
+from wordle_solver_v2 import WordleSolver
 from tqdm import tqdm
 import numpy as np
 N_LETTERS = 5
 
-nb_of_words = 20
-nb_of_games = 50
+nb_of_words = 10
+nb_of_games = 1000
 
 first_words = np.array(get_data(n_letters=N_LETTERS)[0])
 first_words = list(first_words[list(np.random.randint(0,len(first_words),size=nb_of_words))])
+first_words = ["CRANE", "ARISE"]
 avg_tries = []
 
 
