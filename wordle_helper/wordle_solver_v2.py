@@ -31,9 +31,10 @@ def print_color(message, color="yellow", **kwargs):
 
 class WordleSolver():
 
-    def __init__(self, data):
+    def __init__(self, data, L_penalty = 10):
         self.untouched_data = copy.deepcopy(data)
         self.n_letters = len(data[0][0])
+        self.L_penalty = L_penalty
         self.reset()
 
     def letter_info(self, letter, position, good=True):
@@ -188,7 +189,7 @@ class WordleSolver():
             if len(self.tries) >= 6 and word != self.word:
                 if verbose:
                     print(f"You lost :(\nThe word was {self.word}")
-                return 10
+                return self.L_penalty
         if verbose:
             print(f"You won in {len(self.tries)} tries!")
         return len(self.tries)
