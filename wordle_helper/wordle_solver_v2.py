@@ -1,10 +1,24 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 from words import get_data
 import copy
 import random
 
+def get_ax_size(fig, ax):
+    bbox = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+    width, height = bbox.width, bbox.height
+    width *= fig.dpi
+    height *= fig.dpi
+    return width, height
+
+def rgb_color(r,g,b):
+    return (r/255,g/255,b/255)
+
+YELLOW = rgb_color(201,180,88)
+GREEN = rgb_color(106,170,100)
+GREY = rgb_color(120,124,126)
 
 def sum_letters(letter, word):
     res = 0
@@ -136,13 +150,17 @@ class WordleSolver():
     
     def show(self):
         fig = plt.gcf()
-        fig.set_size_inches(self.n_letters, 6)
-        ax1 = plt.subplot(111)
-        scale = 50
+        fig.set_size_inches(self.n_letters+4, 6+3)
+        gs = mpl.gridspec.GridSpec(self.n_letters+4, 9, wspace=0.0, hspace=0.0)    
+        ax1 = fig.add_subplot(gs[0:6, 2:(self.n_letters+2)]) # wordle axis
+        ax2 =fig.add_subplot(gs[6:, 0:]) # letters (keyboard) axis
+        plt.subplots_adjust(0,0,1,1)
+        scale = 30
         ticklabels = ax1.get_xticklabels()
         ticklabels.extend( ax1.get_yticklabels() )
         for label in ticklabels:
             label.set_fontsize(0)
+        # Draw the wordle itself
         for i in range(6):
             y = 5-i
             for k in range(self.n_letters):
@@ -150,15 +168,35 @@ class WordleSolver():
                 if len(self.tries) > i:
                     word_colors = self.get_word_colors(self.tries[i])
                     if word_colors[k] == 2:
-                        color = "green"
+                        color = GREEN
                     elif word_colors[k] == 1:
-                        color = "yellow"
+                        color = YELLOW
                     else:
-                        color = "grey"
-                    ax1.fill(np.array([k, k+0.8, k+0.8, k])*scale, np.array([y,y,y+0.8,y+0.8])*scale, color=color, edgecolor="black")
-                    ax1.text(k*scale+scale/5, y*scale+scale/6, self.tries[i][k], color="white", fontsize=scale*3/5)
+                        color = GREY
+                    ax1.fill(scale+np.array([k, k+0.8, k+0.8, k])*scale, np.array([y,y,y+0.8,y+0.8])*scale, color=color, edgecolor="black")
+                    ax1.text(scale+k*scale+scale/5, y*scale+scale/6, self.tries[i][k], color="white", fontsize=scale, weight="bold")
                 else:
-                    ax1.fill(np.array([k, k+0.8, k+0.8, k])*scale, np.array([y,y,y+0.8,y+0.8])*scale, color="white", edgecolor="black")
+                    ax1.fill(scale+np.array([k, k+0.8, k+0.8, k])*scale, np.array([y,y,y+0.8,y+0.8])*scale, color="white", edgecolor="black")
+        # Draw the keyboard:
+        ax_width, ax_height = get_ax_size(fig, ax2)
+        ratio = ax_width/ax_height
+        for x, letter in enumerate("QWERTYUIOP"):
+            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale, np.array([0,0,0+0.8,0+0.8])*scale/ratio+scale/ratio*2, color="white", edgecolor="black")
+            ax2.text(x*scale+scale*1/5, 2*scale/ratio+scale/12, letter, color="black", fontsize=scale)
+        for x, letter in enumerate("ASDFGHJKL"):
+            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale+scale/3, np.array([0,0,0+0.8,0+0.8])*scale/ratio+scale/ratio, color="white", edgecolor="black")
+            ax2.text(x*scale+scale*1/5+scale/3, 1*scale/ratio+scale/12, letter, color="black", fontsize=scale)
+        for x, letter in enumerate("ZXCVBNM"):
+            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale+scale*2/3, np.array([0,0,0+0.8,0+0.8])*scale/ratio, color="white", edgecolor="black")
+            ax2.text(x*scale+scale*1/5+scale*2/3, 0*scale+scale/12, letter, color="black", fontsize=scale)
+
+        # Draw the info:
+        #info_dict = {}
+        #for tried_word in self.tries:
+#
+        #    for letter in tried_word:
+
+
         plt.show()
 
     def get_word_colors(self, word):
