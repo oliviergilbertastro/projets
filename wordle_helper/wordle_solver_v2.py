@@ -130,6 +130,7 @@ class WordleSolver():
 
     def reset(self):
         self.tries = []
+        self.color_tries = []
         self.data = copy.copy(self.untouched_data)
         self.word = self.data[0][random.randint(0, len(self.data[0])-1)]
     
@@ -143,12 +144,48 @@ class WordleSolver():
         for label in ticklabels:
             label.set_fontsize(0)
         for i in range(6):
+            y = 5-i
             for k in range(self.n_letters):
                 color = "white"
                 if len(self.tries) > i:
-                    color = "lightgrey"
-                ax1.fill(np.array([k, k+0.8, k+0.8, k])*scale, np.array([i,i,i+0.8,i+0.8])*scale, color=color, edgecolor="grey")
+                    word_colors = self.get_word_colors(self.tries[i])
+                    if word_colors[k] == 2:
+                        color = "green"
+                    elif word_colors[k] == 1:
+                        color = "yellow"
+                    else:
+                        color = "grey"
+                    ax1.fill(np.array([k, k+0.8, k+0.8, k])*scale, np.array([y,y,y+0.8,y+0.8])*scale, color=color, edgecolor="black")
+                    ax1.text(k*scale+scale/5, y*scale+scale/6, self.tries[i][k], color="white", fontsize=scale*3/5)
+                else:
+                    ax1.fill(np.array([k, k+0.8, k+0.8, k])*scale, np.array([y,y,y+0.8,y+0.8])*scale, color="white", edgecolor="black")
         plt.show()
+
+    def get_word_colors(self, word):
+        letter_dict = {}
+        word_colors = [0,0,0,0,0]
+        for k, letter in enumerate(word):
+            if letter == self.word[k]:
+                if letter in letter_dict:
+                    letter_dict[letter] += 1
+                else:
+                    letter_dict[letter] = 1
+                word_colors[k] = 2
+        for k, letter in enumerate(word):
+            if letter == self.word[k]:
+                pass
+            elif letter in self.word and letter:
+                if letter in letter_dict:
+                    letter_dict[letter] += 1
+                else:
+                    letter_dict[letter] = 1
+                if sum_letters(letter, self.word) >= letter_dict[letter]:
+                    word_colors[k] = 1
+                else:
+                    word_colors[k] = 0
+            else:
+                word_colors[k] = 0
+        return word_colors
 
     def play_console(self, inputs="console", if_plot=False, first_word=None, verbose=True):
         solved = False
@@ -251,5 +288,5 @@ if __name__ == "__main__":
     Wordle = WordleSolver(get_data())
     # Start reducing sample for example word "DRAFT"
     # Let's say we try STAGE
-    Wordle.try_word("STAGE", [0,1,2,0,0])
-    Wordle.print_word_bank()
+    Wordle.tries = ["STAGE", "APPLE", "POTAT"]
+    Wordle.show()
