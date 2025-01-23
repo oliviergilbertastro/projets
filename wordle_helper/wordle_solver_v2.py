@@ -163,7 +163,7 @@ class WordleSolver():
 
     def get_word_colors(self, word):
         letter_dict = {}
-        word_colors = [0,0,0,0,0]
+        word_colors = [0 for i in range(self.n_letters)]
         for k, letter in enumerate(word):
             if letter == self.word[k]:
                 if letter in letter_dict:
@@ -198,7 +198,7 @@ class WordleSolver():
                 else:
                     word = self.best_word()
                 letter_dict = {}
-                word_colors = [0,0,0,0,0]
+                word_colors = [0 for i in range(self.n_letters)]
                 for k, letter in enumerate(word):
                     if letter == self.word[k]:
                         if letter in letter_dict:
@@ -228,7 +228,7 @@ class WordleSolver():
                     print("--------")
                     for i in range(len(self.tries)):
                         letter_dict = {}
-                        word_colors = [0,0,0,0,0]
+                        word_colors = [0 for i in range(self.n_letters)]
                         for k, letter in enumerate(self.tries[i]):
                             if letter == self.word[k]:
                                 if letter in letter_dict:
