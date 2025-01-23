@@ -1,8 +1,11 @@
-probs = [
-    0.078, 0.02, 0.04, 0.038, 0.11, 0.014, 0.03, 0.023, 0.086, 0.0021,
+probs = {
+    "english": [0.078, 0.02, 0.04, 0.038, 0.11, 0.014, 0.03, 0.023, 0.086, 0.0021,
     0.0097, 0.053, 0.027, 0.072, 0.061, 0.028, 0.0019, 0.073, 0.087,
-    0.067, 0.033, 0.01, 0.0091, 0.0027, 0.016, 0.0044
-]
+    0.067, 0.033, 0.01, 0.0091, 0.0027, 0.016, 0.0044],
+    "francais": [0.07636, 0.00901, 0.0326, 0.03669, 0.14715, 0.01066, 0.00866, 0.00737, 0.07529, 0.00613,
+     0.00074, 0.05456, 0.02968, 0.07095, 0.05796, 0.02521, 0.01362, 0.06693, 0.07948, 0.07244,
+     0.06311, 0.01838, 0.00049, 0.00427, 0.00128, 0.00326]
+}
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 import numpy as np
@@ -15,14 +18,14 @@ def sum_letters(letter, word):
             res += 1
     return res
 
-def get_data(n_letters=5, probability=True):
+def get_data(n_letters=5, probability=True, language="english"):
     """
     n_letters: number of letters you want in each word
     probability: return a matched-length list of the probability for each word
 
     returns a list of two lists [words, probability]
     """
-    words_raw = open("wordle_helper/words.txt").readlines()
+    words_raw = open(f"wordle_helper/{language}.txt").readlines()
     words = []
     for i in range(len(words_raw)):
         curr_word = ""
@@ -40,7 +43,7 @@ def get_data(n_letters=5, probability=True):
     for i in range(len(words)):
         likelihood = 1
         for k in words[i]:
-            likelihood = likelihood*probs[alphabet.index(k)]
+            likelihood = likelihood*probs[language][alphabet.index(k)]
             likelihood = likelihood/sum_letters(k, words[i])
         likelihoods.append(likelihood)
     old_likelihoods = copy.deepcopy(likelihoods)
