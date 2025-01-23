@@ -2380,7 +2380,7 @@ Crabbe/M
 Craft/M
 Craig/M
 Cranach/M
-Crane/M
+crane/M
 Cranmer/M
 Crater/M
 Crawford/M

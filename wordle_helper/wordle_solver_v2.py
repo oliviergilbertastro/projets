@@ -167,48 +167,51 @@ class WordleSolver():
                     else:
                         word_colors[k] = 0
                 self.try_word(word=word, word_colors=word_colors)
-            self.tries.append(word)
-            solved = word == self.word
-            if verbose:
-                print("--------")
-                for i in range(len(self.tries)):
-                    letter_dict = {}
-                    word_colors = [0,0,0,0,0]
-                    for k, letter in enumerate(self.tries[i]):
-                        if letter == self.word[k]:
-                            if letter in letter_dict:
-                                letter_dict[letter] += 1
-                            else:
-                                letter_dict[letter] = 1
-                            #print_color(letter, color="green", end="")
-                            word_colors[k] = 2
-                    for k, letter in enumerate(self.tries[i]):
-                        if letter == self.word[k]:
-                            pass
-                        elif letter in self.word and letter:
-                            if letter in letter_dict:
-                                letter_dict[letter] += 1
-                            else:
-                                letter_dict[letter] = 1
-                            if sum_letters(letter, self.word) >= letter_dict[letter]:
-                                #print_color(letter, color="yellow", end="")
-                                word_colors[k] = 1
+            if word in self.untouched_data[0]:
+                self.tries.append(word)
+                solved = word == self.word
+                if verbose:
+                    print("--------")
+                    for i in range(len(self.tries)):
+                        letter_dict = {}
+                        word_colors = [0,0,0,0,0]
+                        for k, letter in enumerate(self.tries[i]):
+                            if letter == self.word[k]:
+                                if letter in letter_dict:
+                                    letter_dict[letter] += 1
+                                else:
+                                    letter_dict[letter] = 1
+                                #print_color(letter, color="green", end="")
+                                word_colors[k] = 2
+                        for k, letter in enumerate(self.tries[i]):
+                            if letter == self.word[k]:
+                                pass
+                            elif letter in self.word and letter:
+                                if letter in letter_dict:
+                                    letter_dict[letter] += 1
+                                else:
+                                    letter_dict[letter] = 1
+                                if sum_letters(letter, self.word) >= letter_dict[letter]:
+                                    #print_color(letter, color="yellow", end="")
+                                    word_colors[k] = 1
+                                else:
+                                    #print(letter, end="")
+                                    word_colors[k] = 0
                             else:
                                 #print(letter, end="")
                                 word_colors[k] = 0
-                        else:
-                            #print(letter, end="")
-                            word_colors[k] = 0
-                    for k, letter in enumerate(self.tries[i]):
-                        if word_colors[k] == 2:
-                            print_color(letter, color="green", end="")
-                        elif word_colors[k] == 1:
-                            print_color(letter, color="yellow", end="")
-                        else:
-                            print(letter, end="")
-                    print("")
-                for i in range(len(self.tries), 6):
-                    print("_"*self.n_letters)
+                        for k, letter in enumerate(self.tries[i]):
+                            if word_colors[k] == 2:
+                                print_color(letter, color="green", end="")
+                            elif word_colors[k] == 1:
+                                print_color(letter, color="yellow", end="")
+                            else:
+                                print(letter, end="")
+                        print("")
+                    for i in range(len(self.tries), 6):
+                        print("_"*self.n_letters)
+            else:
+                print(f"{word} not in word list!\n")
             if len(self.tries) >= 6 and word != self.word:
                 if verbose:
                     if inputs == "console":
