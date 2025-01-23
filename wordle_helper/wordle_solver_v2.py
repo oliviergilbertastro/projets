@@ -132,8 +132,25 @@ class WordleSolver():
         self.tries = []
         self.data = copy.copy(self.untouched_data)
         self.word = self.data[0][random.randint(0, len(self.data[0])-1)]
+    
+    def show(self):
+        fig = plt.gcf()
+        fig.set_size_inches(self.n_letters, 6)
+        ax1 = plt.subplot(111)
+        scale = 50
+        ticklabels = ax1.get_xticklabels()
+        ticklabels.extend( ax1.get_yticklabels() )
+        for label in ticklabels:
+            label.set_fontsize(0)
+        for i in range(6):
+            for k in range(self.n_letters):
+                color = "white"
+                if len(self.tries) > i:
+                    color = "lightgrey"
+                ax1.fill(np.array([k, k+0.8, k+0.8, k])*scale, np.array([i,i,i+0.8,i+0.8])*scale, color=color, edgecolor="grey")
+        plt.show()
 
-    def play_console(self, inputs="console", first_word=None, verbose=True):
+    def play_console(self, inputs="console", if_plot=False, first_word=None, verbose=True):
         solved = False
         while not solved:
             if inputs == "console":
@@ -212,6 +229,8 @@ class WordleSolver():
                         print("_"*self.n_letters)
             else:
                 print(f"{word} not in word list!\n")
+            if if_plot:
+                self.show()
             if len(self.tries) >= 6 and word != self.word:
                 if verbose:
                     if inputs == "console":
