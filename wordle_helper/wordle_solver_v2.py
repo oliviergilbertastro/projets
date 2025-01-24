@@ -193,7 +193,7 @@ class WordleSolver():
         # Draw the info:
         #info_dict = {}
         #for tried_word in self.tries:
-#
+        #
         #    for letter in tried_word:
 
 
