@@ -20,3 +20,10 @@ print(extracted_text)
 #bot = Generative(access_token)
 
 #print(bot.prompt("who invented electricity?"))
+
+
+def wien(lam):
+    return 2.898E-3/lam
+
+print(wien(480E-9))
+print(wien(580E-9))
