@@ -1,5 +1,6 @@
 from PIL import Image
 import pytesseract
+import matplotlib.pyplot as plt
 
 pytesseract.pytesseract.tesseract_cmd = r'c:\Program Files\Tesseract-OCR\tesseract.exe'
 
@@ -8,10 +9,14 @@ image_path = 'text_example.png'
 
 # Open the image and apply OCR
 image = Image.open(image_path)
+
 extracted_text = pytesseract.image_to_string(image, lang='fra')  # 'fra' for French language
 
 # Output the extracted text
 print(extracted_text)
+
+plt.imshow(image)
+plt.show()
 
 #from ProGPT import Generative
 
