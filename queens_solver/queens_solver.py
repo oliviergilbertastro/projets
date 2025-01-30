@@ -8,7 +8,7 @@ class Solver:
         assert grid.shape[0] == grid.shape[1] == len(colors)
         self.grid = grid # np.array of numbers representing colors
         self.colors = colors
-        self.initial_grid = copy.deepcopy(grid)
+        self.data = np.zeros_like(self.grid) # 0=no info, 1=x, 2=crown
         self.n = grid.shape[0]
         self.crowns = []
         self.color_indices = self.get_color_indices()
@@ -52,11 +52,19 @@ class Solver:
         plt.ylim(50*self.n, 0)
         plt.show()
 
+    def check_if_possible(self, pos):
+        pass
+
     def solve_iteration(self):
         # Check all the grid
+        # For each spot (if possible), place a crown, check which cells are now Xs
+        # If all cells in a row, column, or color are now blocked, block the former cell.
         for y in range(self.n):
             for x in range(self.n):
-                pass
+                changing_data = copy.deepcopy(self.data)
+                changing_data[y,x] = 2
+        # Check if only one square is remaining in each row, column, color.
+        # If so, place a crown there.
 
 
 if __name__ == "__main__":
