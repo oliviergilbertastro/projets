@@ -63,8 +63,14 @@ class Solver:
     def get_cells_with_same_color(self, pos):
         return self.color_indices[self.grid[pos[0],pos[1]]]
 
-    def color_array(self, color):
-        
+    def color_array(self, n_color):
+        """Returns the array of [0,1,2] representing the info we have on the grid for a specific color"""
+        assert n_color in self.grid
+        color_a = []
+        for c in self.color_indices[self.colors[n_color]]:
+            color_a.append(self.data[c[0],c[1]])
+        return color_a
+
 
     def check_if_possible(self, pos):
         """pos = [y,x]"""
@@ -120,6 +126,7 @@ if __name__ == "__main__":
     colors = ["red","blue","green","orange","purple"]
     Queens = Solver(grid, colors)
     Queens.data[4,0] = 2
-    
+    print(Queens.colors)
+    print(Queens.color_array(0))
     print(Queens.check_if_possible([3,1]))
     Queens.show()
