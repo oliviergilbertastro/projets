@@ -3,6 +3,14 @@ import matplotlib.pyplot as plt
 import copy
 from matplotlib.patches import Rectangle
 
+def count_in_array(a, b):
+    """Return the number of instances of b in array a"""
+    res = 0
+    for i in a:
+        if i==b:
+            res+=1
+    return res
+
 class Solver:
     def __init__(self, grid, colors):
         assert grid.shape[0] == grid.shape[1] == len(colors)
@@ -52,8 +60,34 @@ class Solver:
         plt.ylim(50*self.n, 0)
         plt.show()
 
+    def get_cells_with_same_color(self, pos):
+        return self.color_indices[self.grid[pos[0],pos[1]]]
+
+    def color_array(self, color):
+        
+
     def check_if_possible(self, pos):
-        pass
+        """pos = [y,x]"""
+        # Check hline
+        if 2 in self.data[pos[0],:]:
+            return False
+        # Check vline
+        elif 2 in self.data[:,pos[1]]:
+            return False
+        # Check same color
+        for c in self.get_cells_with_same_color(pos):
+            if 2 == self.data[c[0],c[1]]:
+                return False
+        # Check 4-diagonal corners
+        for x in [-1,1]:
+            for y in [-1,1]:
+                try:
+                    if self.data[pos[0]+y,pos[1]+x] == 2:
+                        return False
+                except:
+                    pass
+        
+        return True
 
     def solve_iteration(self):
         # Check all the grid
@@ -61,8 +95,17 @@ class Solver:
         # If all cells in a row, column, or color are now blocked, block the former cell.
         for y in range(self.n):
             for x in range(self.n):
-                changing_data = copy.deepcopy(self.data)
-                changing_data[y,x] = 2
+                if self.data[y,x] == 0: # Only do this if we haven't already placed something
+                    original_data = copy.deepcopy(self.data)
+                    self.data[y,x] = 2
+                    for n in range(self.n):
+                        # If >1 Queen in hline
+                        if count_in_array(self.data[n,:],2) > 1:
+                            original_data[y,x] = 1
+                        # If >1 Queen in vline
+                        if count_in_array(self.data[:,n],2) > 1:
+                            original_data[y,x] = 1
+
         # Check if only one square is remaining in each row, column, color.
         # If so, place a crown there.
 
@@ -76,4 +119,7 @@ if __name__ == "__main__":
                      ])
     colors = ["red","blue","green","orange","purple"]
     Queens = Solver(grid, colors)
+    Queens.data[4,0] = 2
+    
+    print(Queens.check_if_possible([3,1]))
     Queens.show()
