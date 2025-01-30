@@ -74,7 +74,6 @@ def read_picture(path, show=False, nb_of_checks=5):
             xs.append(int((x+1/2)*length_cell))
             ys.append(int((y+1/2)*length_cell))
             col = img[int((y+1/2)*length_cell),int((x+1/2)*length_cell)][:3]
-            print(col)
             col = (int(col[0]*255), int(col[1]*255), int(col[2]*255))
 
             try:
@@ -98,7 +97,7 @@ def read_picture(path, show=False, nb_of_checks=5):
 
 if __name__ == "__main__":
     from queens_solver import Solver
-    print(read_picture('queens_solver/game2.png', show=True))
-
-    
+    grid, colors = read_picture('queens_solver/game2.png', show=False)
+    colors = [[colors[i][k]/255 for k in range(3)] for i in range(len(colors))]
     Queens = Solver(grid, colors)
+    Queens.show()

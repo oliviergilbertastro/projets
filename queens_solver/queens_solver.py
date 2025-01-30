@@ -39,7 +39,7 @@ class Solver:
             plt.axhline(i*50, xmin=0, xmax=1, color='black', linewidth=lw)
         for y in range(self.n):
             for x in range(self.n):
-                rect = Rectangle((x*50, y*50), 50, 50, color=self.colors[self.grid[y,x]], alpha=0.8, fill=True)
+                rect = Rectangle((x*50, y*50), 50, 50, color=self.colors[self.grid[y,x]], alpha=1, fill=True)
                 ax1.add_patch(rect)
                 
                 #if self.startgrid[y,x] != self.blank:
