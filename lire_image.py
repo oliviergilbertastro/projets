@@ -6,6 +6,7 @@ pytesseract.pytesseract.tesseract_cmd = r'c:\Program Files\Tesseract-OCR\tessera
 
 # Path to the uploaded image
 image_path = 'text_example.png'
+image_path = "sudoku_solver/pictures/sudoku9.png"
 
 # Open the image and apply OCR
 image = Image.open(image_path)
