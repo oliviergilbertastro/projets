@@ -97,9 +97,9 @@ def read_picture(path, show=False, nb_of_checks=5):
 
 if __name__ == "__main__":
     from queens_solver import Solver
-    grid, colors = read_picture('queens_solver/game2.png', show=True, nb_of_checks=15)
+    grid, colors = read_picture('queens_solver/game4.png', show=True, nb_of_checks=15)
     colors = [[colors[i][k]/255 for k in range(3)] for i in range(len(colors))]
     Queens = Solver(grid, colors)
     #Queens.show()
-    Queens.solve(show_each_iteration=False)
+    Queens.solve(show_each_iteration=False, verbose=False)
     Queens.show()

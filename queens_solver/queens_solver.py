@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 from matplotlib.patches import Rectangle
+import time
 
 def count_in_array(a, b):
     """Return the number of instances of b in array a"""
@@ -184,7 +185,16 @@ class Solver:
                 regions_empty_spots.append(count_in_array(self.data[n,:],0)) # hline
                 regions_empty_spots.append(count_in_array(self.data[:,n],0)) # vline
                 regions_empty_spots.append(count_in_array(self.color_array(n),0)) # color
-            min_index = regions_empty_spots.index(np.min(regions_empty_spots))
+            regions_empty_spots_sorted = copy.deepcopy(regions_empty_spots)
+            regions_empty_spots_sorted.sort()
+            index_found = False
+            k = 0
+            while not index_found:
+                min_index = regions_empty_spots.index(regions_empty_spots_sorted[k])
+                if regions_empty_spots[min_index] == 0:
+                    k += 1
+                else:
+                    index_found = True
             if min_index % 3 == 0: # hline
                 x, y = np.random.randint(0,self.n), min_index//3
             elif min_index % 3 == 1: # vline
@@ -197,9 +207,12 @@ class Solver:
                 found = True
 
 
-    def solve(self, show_each_iteration=False):
+    def solve(self, show_each_iteration=False, verbose=False):
+        start_time = time.time()
         tries = 0
+        changes = 0
         while not self.solved:
+            self.last_data = copy.deepcopy(self.data)
             self.placed_crowns.append(count_in_array(self.data, 2))
             self.placed_Xs.append(count_in_array(self.data, 1))
             if self.placed_crowns[-1] >= self.placed_crowns[-2]:
@@ -208,16 +221,22 @@ class Solver:
                 self.random_try()
             self.cut_possibilities()
             self.put_crowns()
-            if not self.check_valid():
+            if (self.data == self.last_data).all():
+                changes += 1
+            else:
+                changes = 0
+            if not self.check_valid() or changes >= 2 and not (self.last_checkpoint == np.zeros_like(self.grid)).all():
                 self.data = copy.deepcopy(self.last_checkpoint)
             self.solved = self.check_solved()
             #if self.solved:
             #    self.show()
             tries += 1
+            if verbose:
+                print(tries, changes, self.check_valid(), self.solved)
             if show_each_iteration:
                 self.show()
         self.put_Xs()
-        print(f"Solved")
+        print(f"Solved in {np.around(time.time() - start_time, 2)} seconds")
 
     def check_valid(self):
         for n in range(self.n):
