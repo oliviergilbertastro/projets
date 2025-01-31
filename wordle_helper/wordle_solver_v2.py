@@ -177,25 +177,55 @@ class WordleSolver():
                     ax1.text(scale+k*scale+scale/5, y*scale+scale/6, self.tries[i][k], color="white", fontsize=scale, weight="bold")
                 else:
                     ax1.fill(scale+np.array([k, k+0.8, k+0.8, k])*scale, np.array([y,y,y+0.8,y+0.8])*scale, color="white", edgecolor="black")
+        
+
+        # Letter keyboard info:
+        info_dict = {}
+        for tried_word in self.tries:
+            word_colors = self.get_word_colors(tried_word)
+            for i in range(len(tried_word)):
+                if tried_word[i] in info_dict:
+                    if word_colors[i] > info_dict[tried_word[i]]:
+                        info_dict[tried_word[i]] = word_colors[i]
+                else:
+                    info_dict[tried_word[i]] = word_colors[i]
+
         # Draw the keyboard:
         ax_width, ax_height = get_ax_size(fig, ax2)
         ratio = ax_width/ax_height
         for x, letter in enumerate("QWERTYUIOP"):
-            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale, np.array([0,0,0+0.8,0+0.8])*scale/ratio+scale/ratio*2, color="white", edgecolor="black")
+            color = "white"
+            if letter in info_dict:
+                if info_dict[letter] == 2:
+                    color = GREEN
+                elif info_dict[letter] == 1:
+                    color = YELLOW
+                else:
+                    color = GREY
+            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale, np.array([0,0,0+0.8,0+0.8])*scale/ratio+scale/ratio*2, color=color, edgecolor="black")
             ax2.text(x*scale+scale*1/5, 2*scale/ratio+scale/12, letter, color="black", fontsize=scale)
         for x, letter in enumerate("ASDFGHJKL"):
-            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale+scale/3, np.array([0,0,0+0.8,0+0.8])*scale/ratio+scale/ratio, color="white", edgecolor="black")
+            color = "white"
+            if letter in info_dict:
+                if info_dict[letter] == 2:
+                    color = GREEN
+                elif info_dict[letter] == 1:
+                    color = YELLOW
+                else:
+                    color = GREY
+            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale+scale/3, np.array([0,0,0+0.8,0+0.8])*scale/ratio+scale/ratio, color=color, edgecolor="black")
             ax2.text(x*scale+scale*1/5+scale/3, 1*scale/ratio+scale/12, letter, color="black", fontsize=scale)
         for x, letter in enumerate("ZXCVBNM"):
-            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale+scale*2/3, np.array([0,0,0+0.8,0+0.8])*scale/ratio, color="white", edgecolor="black")
+            color = "white"
+            if letter in info_dict:
+                if info_dict[letter] == 2:
+                    color = GREEN
+                elif info_dict[letter] == 1:
+                    color = YELLOW
+                else:
+                    color = GREY
+            ax2.fill(np.array([x, x+0.8, x+0.8, x])*scale+scale*2/3, np.array([0,0,0+0.8,0+0.8])*scale/ratio, color=color, edgecolor="black")
             ax2.text(x*scale+scale*1/5+scale*2/3, 0*scale+scale/12, letter, color="black", fontsize=scale)
-
-        # Draw the info:
-        #info_dict = {}
-        #for tried_word in self.tries:
-        #
-        #    for letter in tried_word:
-
 
         plt.show()
 
