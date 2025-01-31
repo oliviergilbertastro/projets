@@ -5485,6 +5485,7 @@ coulee
 couler
 couleur
 couleurs
+couli
 coulisse
 coulisser
 coulisses
@@ -16453,6 +16454,7 @@ poignee
 poignee de main
 poignet
 poil
+poilu
 poincon
 poindre
 poing
