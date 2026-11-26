@@ -1,64 +1,96 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-
-
 </style>
 </head>
 
-<body style="margin: 0 !important;
-    padding: 0 !important;overflow: hidden; ">
+<body style="margin: 0; padding: 0; overflow: hidden;">
 
-<canvas id="myCanvas" width="window.innerWidth;" height="window.innerHeight;" style="background-color:rgb(76,76,76); "></canvas>
+<canvas id="myCanvas" style="background-color:rgb(76,76,76);"></canvas>
 
 <script>
 
+const c = document.getElementById("myCanvas");
+const ctx = c.getContext("2d");
 
-myCanvas.width = window.innerWidth;
-myCanvas.height = window.innerHeight;
+c.width = window.innerWidth;
+c.height = window.innerHeight;
 
-
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
+// Triangle parameters
 const cx = c.width / 2;
 const cy = c.height / 2;
-const side_length = Math.min(c.width,c.height)/1.5;
+const side_length = Math.min(c.width, c.height) / 1.5;
 
-function draw() {
-    ctx.clearRect(0, 0, c.width, c.height);
+// Triangle vertices
+const top_vertex = {
+    x: cx,
+    y: cy - side_length * Math.sqrt(3) / 3
+};
 
-    // Background
-    ctx.fillStyle = "rgb(76, 76, 76)";
-    ctx.fillRect(0, 0, c.width, c.height);
+const bottom_left = {
+    x: cx - side_length / 2,
+    y: cy + side_length * Math.sqrt(3) / 6
+};
 
-    // Centered equilateral triangle
-    
-    ctx.beginPath();
-    ctx.moveTo(cx, cy - side_length * Math.sqrt(3) / 3); // top
-    ctx.lineTo(cx - side_length / 2, cy + side_length * Math.sqrt(3) / 6); // bottom left
-    ctx.lineTo(cx + side_length / 2, cy + side_length * Math.sqrt(3) / 6); // bottom right
-    ctx.closePath();
-    ctx.fillStyle = "#FFCC00";
-    ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = "#333333";
-    ctx.stroke();
+const bottom_right = {
+    x: cx + side_length / 2,
+    y: cy + side_length * Math.sqrt(3) / 6
+};
 
+const corners = [top_vertex, bottom_left, bottom_right];
 
-   
-    // UI
-    
+// Starting point
+let current_point = {
+    x: cx,
+    y: cy
+};
+
+// Calculate next point
+function next_point() {
+    // Randomly choose one of the three corners
+    const corner = corners[Math.floor(Math.random() * 3)];
+
+    // Calculate midpoint
+    return {
+        x: (current_point.x + corner.x) / 2,
+        y: (current_point.y + corner.y) / 2
+    };
 }
 
+// Draw a small circle
+function draw_point(p) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 1, 0, 2 * Math.PI);
+    ctx.fillStyle = "black";
+    ctx.fill();
+}
 
+function draw() {
 
+    // Calculate and draw new points
+    for (let i = 0; i < 100; i++) {
+        current_point = next_point();
+        draw_point(current_point);
+    }
 
+}
 
+// Draw triangle outline
+ctx.beginPath();
+ctx.moveTo(top_vertex.x, top_vertex.y);
+ctx.lineTo(bottom_left.x, bottom_left.y);
+ctx.lineTo(bottom_right.x, bottom_right.y);
+ctx.closePath();
+ctx.fillStyle="white";
+ctx.fill();
+ctx.lineWidth = 4;
+ctx.strokeStyle = "#333333";
+ctx.stroke();
 
-setInterval(draw, 10);
-
-
+// Continuously generate points
+setInterval(draw, 100);
 
 </script>
 </body>
