@@ -70,7 +70,7 @@ function draw_point(p) {
 function draw() {
 
     // Calculate and draw new points
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1; i++) {
         current_point = next_point();
         draw_point(current_point);
     }
@@ -90,7 +90,7 @@ ctx.strokeStyle = "#333333";
 ctx.stroke();
 
 // Continuously generate points
-setInterval(draw, 100);
+setInterval(draw, 10);
 
 </script>
 </body>
