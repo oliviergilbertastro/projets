@@ -21,7 +21,9 @@ myCanvas.height = window.innerHeight;
 
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-
+const cx = c.width / 2;
+const cy = c.height / 2;
+const side_length = Math.min(c.width,c.height)/1.5;
 
 function draw() {
     ctx.clearRect(0, 0, c.width, c.height);
@@ -31,10 +33,11 @@ function draw() {
     ctx.fillRect(0, 0, c.width, c.height);
 
     // Centered equilateral triangle
+    
     ctx.beginPath();
-    ctx.moveTo(c.width/2, c.height/2-100); // top
-    ctx.lineTo(c.width/2-86.6, c.height/2+50); // bottom left
-    ctx.lineTo(c.width/2+86.6, c.height/2+50); // bottom right
+    ctx.moveTo(cx, cy - side_length * Math.sqrt(3) / 3); // top
+    ctx.lineTo(cx - side_length / 2, cy + side_length * Math.sqrt(3) / 6); // bottom left
+    ctx.lineTo(cx + side_length / 2, cy + side_length * Math.sqrt(3) / 6); // bottom right
     ctx.closePath();
     ctx.fillStyle = "#FFCC00";
     ctx.fill();
