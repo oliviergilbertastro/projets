@@ -22,7 +22,7 @@ c.height = window.innerHeight;
 const cx = c.width / 2;
 const cy = c.height / 2;
 
-const n = 5; // Number of vertices
+const n = 3; // Number of vertices
 const radius = Math.min(c.width, c.height) / 3;
 
 // Calculate polygon vertices
@@ -82,7 +82,7 @@ function draw_polygon() {
 // Animation
 function draw() {
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 100; i++) {
         current_point = next_point();
         draw_point(current_point);
     }
