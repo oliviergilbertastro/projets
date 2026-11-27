@@ -60,22 +60,20 @@ function next_point() {
 function draw_point(p) {
     ctx.beginPath();
     ctx.arc(p.x, p.y, 1, 0, 2 * Math.PI);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "black";
     ctx.fill();
 }
 
 // Draw polygon outline
 function draw_polygon() {
-
     ctx.beginPath();
     ctx.moveTo(corners[0].x, corners[0].y);
-
     for (let i = 1; i < n; i++) {
         ctx.lineTo(corners[i].x, corners[i].y);
     }
-
     ctx.closePath();
-
+    ctx.fillStyle="white";
+    ctx.fill();
     ctx.lineWidth = 4;
     ctx.strokeStyle = "#333333";
     ctx.stroke();
